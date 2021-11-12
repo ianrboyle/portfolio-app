@@ -1,0 +1,28 @@
+###INDEX STOCKS####
+GET http://localhost:3000/stocks
+Content-Type: application/json
+
+### CREATE STOCK###
+POST http://localhost:3000/stocks
+Content-Type: application/json
+
+{
+  "symbol": "Fake",
+  "company_name": "Fake Company",
+  "cost_basis": 400,
+  "current_price": 340.92,
+  "quantity": 5
+}
+### UPDATE STOCK###
+PATCH http://localhost:3000/stocks/4
+Content-Type: application/json
+
+{
+  "cost_basis": 405,
+  "current_price": 339.92,
+  "quantity": 3.0
+}
+
+### Destroy STOCK###
+DELETE http://localhost:3000/stocks/5
+Content-Type: application/json

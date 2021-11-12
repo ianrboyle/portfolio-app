@@ -5,7 +5,9 @@ Rails.application.routes.draw do
   ###STOCKS ROUTES###
   get "/stocks" => "stocks#index"
   get "/stocks/:id" => "stocks#show"
-
+  post "/stocks" => "stocks#create"
+  patch "/stocks/:id" => "stocks#update"
+  delete "stocks/:id" => "stocks#destroy"
   ###USER ROUTES###
   post "/users" => "users#create"
 
