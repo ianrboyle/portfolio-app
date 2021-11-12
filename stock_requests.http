@@ -1,9 +1,11 @@
 ###INDEX STOCKS####
 GET http://localhost:3000/stocks
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2MzY4Mzk4MTR9.juB3JbWpcqeK2OWEF8p8gEZO36TZFoUU9aJU884R3HU
 Content-Type: application/json
 
 ### CREATE STOCK###
 POST http://localhost:3000/stocks
+Authorization: Bearer
 Content-Type: application/json
 
 {
@@ -15,6 +17,7 @@ Content-Type: application/json
 }
 ### UPDATE STOCK###
 PATCH http://localhost:3000/stocks/4
+Authorization: Bearer
 Content-Type: application/json
 
 {
@@ -25,4 +28,5 @@ Content-Type: application/json
 
 ### Destroy STOCK###
 DELETE http://localhost:3000/stocks/5
+Authorization: Bearer
 Content-Type: application/json
