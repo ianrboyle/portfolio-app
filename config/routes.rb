@@ -3,4 +3,7 @@ Rails.application.routes.draw do
 
   ###USER ROUTES###
   post "/users" => "users#create"
+
+  ###SESSIONS ROUTES###
+  post "/sessions" => "sessions#create"
 end
