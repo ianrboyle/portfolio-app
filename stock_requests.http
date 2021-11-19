@@ -3,9 +3,13 @@ GET http://localhost:3000/stocks
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzc0MzIzNjN9.J2ApoSOe87CcVSh6ra0i8p4qi3SKtDrkbu0CSBdSq5c
 Content-Type: application/json
 
+###Show STOCK####
+GET http://localhost:3000/stocks/1
+Content-Type: application/json
+
 ### CREATE STOCK###
 POST http://localhost:3000/stocks
-Authorization: Bearer
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzc0Mzg2OTl9.ouiEWEvVptBq-PLJd4jcqxlJAqtYWn00t5k-aPMhdlo
 Content-Type: application/json
 
 {
