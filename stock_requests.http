@@ -1,6 +1,6 @@
 ###INDEX STOCKS####
 GET http://localhost:3000/stocks
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2MzY4Mzk4MTR9.juB3JbWpcqeK2OWEF8p8gEZO36TZFoUU9aJU884R3HU
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzc0MzIzNjN9.J2ApoSOe87CcVSh6ra0i8p4qi3SKtDrkbu0CSBdSq5c
 Content-Type: application/json
 
 ### CREATE STOCK###
@@ -16,7 +16,7 @@ Content-Type: application/json
   "quantity": 5
 }
 ### UPDATE STOCK###
-PATCH http://localhost:3000/stocks/4
+PUT http://localhost:3000/stocks/4
 Authorization: Bearer
 Content-Type: application/json
 
