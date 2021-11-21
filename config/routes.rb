@@ -13,8 +13,11 @@ Rails.application.routes.draw do
   get "/sectors" => "sectors#index"
   get "/sectors/:id" => "sectors#show"
   post "/sectors" => "sectors#create"
-  put "/sectors/:id" => "sectors#update"
-  delete "sectors/:id" => "sectors#destroy"
+
+  ###INDUSTRY ROUTES###
+  get "/industries" => "industries#index"
+  get "/industries/:id" => "industries#show"
+  post "/industries" => "industries#create"
 
   ###USER ROUTES###
   post "/users" => "users#create"
