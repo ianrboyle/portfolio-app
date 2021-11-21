@@ -20,14 +20,13 @@ Content-Type: application/json
   "quantity": 5
 }
 ### UPDATE STOCK###
-PUT http://localhost:3000/stocks/4
-Authorization: Bearer
+PUT http://localhost:3000/stocks/9
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzc1OTgxNzJ9.K4emx8x4HZdLbYOcbKDSXO28eUzJx2sBS-LnjxqYyGg
 Content-Type: application/json
 
 {
-  "cost_basis": 405,
-  "current_price": 339.92,
-  "quantity": 3.0
+  "sector_id": 3,
+  "industry_id": 4
 }
 
 ### Destroy STOCK###

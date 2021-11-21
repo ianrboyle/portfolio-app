@@ -1,3 +1,3 @@
 class IndustrySerializer < ActiveModel::Serializer
-  attributes :id, :industry
+  attributes :id, :industry, :industry_percent_of_account
 end

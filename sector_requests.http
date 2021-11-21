@@ -2,5 +2,5 @@ POST http://localhost:3000/sectors.json
 Content-Type: application/json
 
 {
-  "sector": "Consumer Electronics"
+  "sector": "Communication Services"
 }

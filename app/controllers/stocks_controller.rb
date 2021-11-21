@@ -17,7 +17,9 @@ class StocksController < ApplicationController
       company_name: params[:company_name],
       cost_basis: params[:cost_basis],
       current_price: params[:current_price],
-      quantity: params[:quantity]
+      quantity: params[:quantity],
+      sector_id: params[:sector_id],
+      industry_id: params[:industry_id]
     )
     if stock.save
       render json: stock
@@ -28,9 +30,12 @@ class StocksController < ApplicationController
 
   def update
     stock = Stock.find_by(id: params[:id])
+    stock.user_id = current_user.id
     stock.cost_basis = params[:cost_basis] || stock.cost_basis
     stock.current_price = params[:current_price] || stock.current_price
     stock.quantity = params[:quantity] || stock.quantity
+    stock.sector_id = params[:sector_id] || stock.sector_id
+    stock.industry_id = params[:industry_id] || stock.industry_id
     if stock.save
       render json: stock
     else
