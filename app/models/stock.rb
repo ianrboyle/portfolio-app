@@ -13,4 +13,8 @@ class Stock < ApplicationRecord
     #how do we select the current stock?
     (current_total_value/account_value * 100).round(2)
   end
+
+  def total_gain_loss
+    ((current_price - cost_basis) * quantity).round(3)
+  end
 end
