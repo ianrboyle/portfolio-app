@@ -8,6 +8,14 @@ Rails.application.routes.draw do
   post "/stocks" => "stocks#create"
   put "/stocks/:id" => "stocks#update"
   delete "stocks/:id" => "stocks#destroy"
+
+  ###SECTORS ROUTES###
+  get "/sectors" => "sectors#index"
+  get "/sectors/:id" => "sectors#show"
+  post "/sectors" => "sectors#create"
+  put "/sectors/:id" => "sectors#update"
+  delete "sectors/:id" => "sectors#destroy"
+
   ###USER ROUTES###
   post "/users" => "users#create"
 

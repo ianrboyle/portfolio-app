@@ -2,12 +2,12 @@ class StocksController < ApplicationController
   # before_action :authenticate_user
   def index
     stocks = Stock.all
-    render json: stocks.as_json
+    render json: stocks
   end
 
   def show
     stock = Stock.find_by(id: params[:id])
-    render json: stock.as_json
+    render json: stock
   end
   
   def create
@@ -20,7 +20,7 @@ class StocksController < ApplicationController
       quantity: params[:quantity]
     )
     if stock.save
-      render json: stock.as_json
+      render json: stock
     else
       render json: {errors: stock.errors.full_messages}, status: 418
     end
@@ -32,7 +32,7 @@ class StocksController < ApplicationController
     stock.current_price = params[:current_price] || stock.current_price
     stock.quantity = params[:quantity] || stock.quantity
     if stock.save
-      render json: stock.as_json
+      render json: stock
     else
       render json: {errors: stock.errors.full_messages}, status: 406
     end
