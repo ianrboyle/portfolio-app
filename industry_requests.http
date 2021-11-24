@@ -4,3 +4,6 @@ Content-Type: application/json
 {
   "industry": "Fake Industry"
 }
+
+### DELETE Industry
+DELETE http://localhost:3000/industries/6.json
