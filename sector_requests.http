@@ -2,5 +2,8 @@ POST http://localhost:3000/sectors.json
 Content-Type: application/json
 
 {
-  "sector": "Communication Services"
+  "sector": "Fake Sector"
 }
+
+### DELETE SECTOR
+DELETE http://localhost:3000/sectors/5.json

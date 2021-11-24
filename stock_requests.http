@@ -1,15 +1,16 @@
 ###INDEX STOCKS####
 GET http://localhost:3000/stocks
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzc0MzIzNjN9.J2ApoSOe87CcVSh6ra0i8p4qi3SKtDrkbu0CSBdSq5c
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzc4NjYxMDN9.pHUFuTIjII_pf5YLovM44wTXmvH5mVQ3Rt9eg46vhaY
 Content-Type: application/json
 
 ###Show STOCK####
 GET http://localhost:3000/stocks/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzc4NjYxMDN9.pHUFuTIjII_pf5YLovM44wTXmvH5mVQ3Rt9eg46vhaY
 Content-Type: application/json
 
 ### CREATE STOCK###
 POST http://localhost:3000/stocks
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzc0Mzg2OTl9.ouiEWEvVptBq-PLJd4jcqxlJAqtYWn00t5k-aPMhdlo
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzc4NjYxMDN9.pHUFuTIjII_pf5YLovM44wTXmvH5mVQ3Rt9eg46vhaY
 Content-Type: application/json
 
 {
@@ -17,11 +18,13 @@ Content-Type: application/json
   "company_name": "Fake Company",
   "cost_basis": 400,
   "current_price": 340.92,
-  "quantity": 5
+  "quantity": 5,
+  "sector_id": 2,
+  "industry_id": 2
 }
 ### UPDATE STOCK###
-PUT http://localhost:3000/stocks/9
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzc1OTgxNzJ9.K4emx8x4HZdLbYOcbKDSXO28eUzJx2sBS-LnjxqYyGg
+PATCH http://localhost:3000/stocks/9
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzc4NjYxMDN9.pHUFuTIjII_pf5YLovM44wTXmvH5mVQ3Rt9eg46vhaY
 Content-Type: application/json
 
 {
@@ -30,6 +33,6 @@ Content-Type: application/json
 }
 
 ### Destroy STOCK###
-DELETE http://localhost:3000/stocks/5
+DELETE http://localhost:3000/stocks/9
 Authorization: Bearer
 Content-Type: application/json

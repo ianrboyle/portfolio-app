@@ -20,4 +20,9 @@ class SectorsController < ApplicationController
       render json: {errors: sector.errors.full_messages}, status: 406
     end
   end
+  def destroy
+    sector = Sector.find_by(id: params[:id])
+    sector.destroy
+    render json: {message: "Sector removed from portfolio."}
+  end
 end

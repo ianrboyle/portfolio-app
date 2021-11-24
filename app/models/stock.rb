@@ -17,4 +17,8 @@ class Stock < ApplicationRecord
   def total_gain_loss
     ((current_price - cost_basis) * quantity).round(3)
   end
+
+  def total_gain_loss_percent
+    ((total_gain_loss/(quantity * cost_basis))*100).round(2)
+  end
 end

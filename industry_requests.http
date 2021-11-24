@@ -2,5 +2,5 @@ POST http://localhost:3000/industries
 Content-Type: application/json
 
 {
-  "industry": "Internet Content & Information"
+  "industry": "Fake Industry"
 }

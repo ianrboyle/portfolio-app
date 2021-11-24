@@ -6,18 +6,20 @@ Rails.application.routes.draw do
   get "/stocks" => "stocks#index"
   get "/stocks/:id" => "stocks#show"
   post "/stocks" => "stocks#create"
-  put "/stocks/:id" => "stocks#update"
+  patch "/stocks/:id" => "stocks#update"
   delete "stocks/:id" => "stocks#destroy"
 
   ###SECTORS ROUTES###
   get "/sectors" => "sectors#index"
   get "/sectors/:id" => "sectors#show"
   post "/sectors" => "sectors#create"
+  delete "/sectors/:id" => "sectors#destroy"
 
   ###INDUSTRY ROUTES###
   get "/industries" => "industries#index"
   get "/industries/:id" => "industries#show"
   post "/industries" => "industries#create"
+  delete "/industries/:id" => "industries#destroy"
 
   ###USER ROUTES###
   post "/users" => "users#create"
