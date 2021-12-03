@@ -1,7 +1,7 @@
 class StocksController < ApplicationController
-  # before_action :authenticate_user
+  before_action :authenticate_user
   def index
-    stocks = Stock.all
+    stocks = current_user.stocks
     render json: stocks
   end
 

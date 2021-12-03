@@ -8,7 +8,8 @@ class Stock < ApplicationRecord
   end
 
   def percent_of_account
-    stocks = Stock.all
+    
+    stocks = Stock.where(user_id: user.id)
     account_value = stocks.reduce(0){|sum, stock| sum + stock.current_total_value}
     #how do we select the current stock?
     (current_total_value/account_value * 100).round(2)

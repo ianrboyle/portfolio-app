@@ -1,6 +1,6 @@
 ###INDEX STOCKS####
 GET http://localhost:3000/stocks
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzc4NjYxMDN9.pHUFuTIjII_pf5YLovM44wTXmvH5mVQ3Rt9eg46vhaY
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJleHAiOjE2Mzg2NDA1MzR9.h6rIBQdSOn0ytGzFDb0-wPiqHy493oe59kQ-KVEZGQU
 Content-Type: application/json
 
 ###Show STOCK####
@@ -10,7 +10,7 @@ Content-Type: application/json
 
 ### CREATE STOCK###
 POST http://localhost:3000/stocks
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzc4NjYxMDN9.pHUFuTIjII_pf5YLovM44wTXmvH5mVQ3Rt9eg46vhaY
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJleHAiOjE2Mzg2NDA1MzR9.h6rIBQdSOn0ytGzFDb0-wPiqHy493oe59kQ-KVEZGQU
 Content-Type: application/json
 
 {
