@@ -11,6 +11,7 @@ class IndustriesController < ApplicationController
 
   def create
     industry = Industry.new(
+      user_id: current_user.id,
       industry: params[:industry]
     )
     industry.save
@@ -22,7 +23,9 @@ class IndustriesController < ApplicationController
   end
   def destroy
     industry = Industry.find_by(id: params[:id])
+    stocks = Stock.find_by(industry_id: industry.id)
+    stocks.destroy
     industry.destroy
-    render json: {message: "Industry removed from portfolio."}
+    render json: {message: "Industry removed from portfolio and all associated stocks."}
   end
 end

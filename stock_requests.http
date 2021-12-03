@@ -14,13 +14,13 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJleHAiOjE2Mzg2NDA1M
 Content-Type: application/json
 
 {
-  "symbol": "Fake",
-  "company_name": "Fake Company",
+  "symbol": "Blah",
+  "company_name": "Blah Company",
   "cost_basis": 400,
   "current_price": 340.92,
   "quantity": 5,
   "sector_id": 2,
-  "industry_id": 2
+  "industry_id": 9
 }
 ### UPDATE STOCK###
 PATCH http://localhost:3000/stocks/9
@@ -33,6 +33,6 @@ Content-Type: application/json
 }
 
 ### Destroy STOCK###
-DELETE http://localhost:3000/stocks/9
-Authorization: Bearer
+DELETE http://localhost:3000/stocks/13
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJleHAiOjE2Mzg2NDA1MzR9.h6rIBQdSOn0ytGzFDb0-wPiqHy493oe59kQ-KVEZGQU
 Content-Type: application/json

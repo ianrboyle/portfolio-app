@@ -1,4 +1,5 @@
 POST http://localhost:3000/industries
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJleHAiOjE2Mzg2NDA1MzR9.h6rIBQdSOn0ytGzFDb0-wPiqHy493oe59kQ-KVEZGQU 
 Content-Type: application/json
 
 {
@@ -6,4 +7,4 @@ Content-Type: application/json
 }
 
 ### DELETE Industry
-DELETE http://localhost:3000/industries/6.json
+DELETE http://localhost:3000/industries/9.json

@@ -1,9 +1,13 @@
-POST http://localhost:3000/sectors.json 
+GET http://localhost:3000/sectors.json
+Content-Type: application/json
+
+###CREATE SECTOR
+POST http://localhost:3000/sectors.json
 Content-Type: application/json
 
 {
-  "sector": "Fake Sector"
+  "sector": "Uranium"
 }
 
 ### DELETE SECTOR
-DELETE http://localhost:3000/sectors/5.json
+DELETE http://localhost:3000/sectors/6.json
