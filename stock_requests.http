@@ -19,8 +19,8 @@ Content-Type: application/json
   "cost_basis": 400,
   "current_price": 340.92,
   "quantity": 5,
-  "sector_id": 2,
-  "industry_id": 9
+  "sector_id": 8,
+  "industry_id": 6
 }
 ### UPDATE STOCK###
 PATCH http://localhost:3000/stocks/9

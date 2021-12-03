@@ -6,8 +6,8 @@ POST http://localhost:3000/sectors.json
 Content-Type: application/json
 
 {
-  "sector": "Uranium"
+  "sector": "Fake Sector"
 }
 
 ### DELETE SECTOR
-DELETE http://localhost:3000/sectors/6.json
+DELETE http://localhost:3000/sectors/8.json

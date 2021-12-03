@@ -22,6 +22,8 @@ class SectorsController < ApplicationController
   end
   def destroy
     sector = Sector.find_by(id: params[:id])
+    stocks = Stock.find_by(sector_id: sector.id)
+    stocks.destroy
     sector.destroy
     render json: {message: "Sector removed from portfolio."}
   end
