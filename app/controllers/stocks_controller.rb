@@ -11,16 +11,70 @@ class StocksController < ApplicationController
   end
   
   def create
-    stock = Stock.new(
-      user_id: current_user.id,
-      symbol: params[:symbol],
-      company_name: params[:company_name],
-      cost_basis: params[:cost_basis],
-      current_price: params[:current_price],
-      quantity: params[:quantity],
-      sector_id: params[:sector_id],
-      industry_id: params[:industry_id]
-    )
+    require './.api_key.rb'
+    response = HTTP.get("https://financialmodelingprep.com/api/v3/profile/#{params[:symbol]}?apikey=#{$api_key}")
+    stock_info = response.parse(:json)
+    #check to see if the sector already exists
+    sector = Sector.find_by(sector: stock_info[0]["sector"])
+    industry = Industry.find_by(industry: stock_info[0]["industry"])
+    if sector && industry
+      stock = Stock.new(
+        user_id: current_user.id,
+        symbol: stock_info[0]["symbol"],
+        company_name: stock_info[0]["companyName"],
+        cost_basis: params[:cost_basis],
+        current_price: stock_info[0]["price"],
+        quantity: params[:quantity],
+        sector_id: sector.id,
+        industry_id: industry.id
+      )
+    elsif sector && !industry
+      new_industry = Industry.new(industry: stock_info[0]["industry"])
+      new_industry.save
+      stock = Stock.new(
+        user_id: current_user.id,
+        symbol: stock_info[0]["symbol"],
+        company_name: stock_info[0]["companyName"],
+        cost_basis: params[:cost_basis],
+        current_price: stock_info[0]["price"],
+        quantity: params[:quantity],
+        sector_id: sector.id,
+        industry_id: new_industry.id
+      )
+    elsif industry && !sector
+      new_sector = Sector.new(
+        sector: stock_info[0]["sector"]
+      )
+      new_sector.save
+      stock = Stock.new(
+        user_id: current_user.id,
+        symbol: stock_info[0]["symbol"],
+        company_name: stock_info[0]["companyName"],
+        cost_basis: params[:cost_basis],
+        current_price: stock_info[0]["price"],
+        quantity: params[:quantity],
+        sector_id: new_sector.id,
+        industry_id: industry.id
+      )
+    else
+      new_sector = Sector.new(
+        sector: stock_info[0]["sector"]
+      )
+      new_sector.save
+      new_industry = Industry.new(industry: stock_info[0]["industry"])
+      new_industry.save
+      stock = Stock.new(
+        user_id: current_user.id,
+        symbol: stock_info[0]["symbol"],
+        company_name: stock_info[0]["companyName"],
+        cost_basis: params[:cost_basis],
+        current_price: stock_info[0]["price"],
+        quantity: params[:quantity],
+        sector_id: new_sector.id,
+        industry_id: new_industry.id
+      )
+    end
+    
     if stock.save
       render json: stock
     else
