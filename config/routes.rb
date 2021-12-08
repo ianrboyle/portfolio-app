@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   get "/stocks" => "stocks#index"
   get "/stocks/:id" => "stocks#show"
   post "/stocks/:symbol" => "stocks#create"
-  patch "/stocks/:id" => "stocks#update"
+  patch "/stocks/:symbol" => "stocks#update"
   delete "stocks/:id" => "stocks#destroy"
 
   ###SECTORS ROUTES###

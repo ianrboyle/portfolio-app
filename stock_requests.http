@@ -9,24 +9,20 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzc4NjYxM
 Content-Type: application/json
 
 ### CREATE STOCK###
-POST http://localhost:3000/stocks/MSFT
+POST http://localhost:3000/stocks/AMZN
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzg5MDUxNjR9.hisfEfJPC_crPHuNHkonEZQ9mqHcY7yG4PN_WL7eLLU
 Content-Type: application/json
 
 {
-  "cost_basis": 350,
+  "cost_basis": 3500,
   "quantity": 5
 }
 
 ### UPDATE STOCK###
-PATCH http://localhost:3000/stocks/9
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzc4NjYxMDN9.pHUFuTIjII_pf5YLovM44wTXmvH5mVQ3Rt9eg46vhaY
+PATCH http://localhost:3000/stocks/CCJ.json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2MzkwNjgyNjl9.hmMDKd9SKqxmTI84i_KhmuI88cfP3LMXy1JZ2-POFF8
 Content-Type: application/json
 
-{
-  "sector_id": 3,
-  "industry_id": 4
-}
 
 ### Destroy STOCK###
 DELETE http://localhost:3000/stocks/13

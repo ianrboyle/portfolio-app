@@ -83,10 +83,32 @@ class StocksController < ApplicationController
   end
 
   def update
-    stock = Stock.find_by(id: params[:id])
+    require './.api_key.rb'
+    require 'uri'
+    require 'net/http'
+    require 'openssl'
+    require 'JSON'
+
+    url = URI("https://yfapi.net/v6/finance/quote?symbols=#{params[:symbol]}")
+
+    http = Net::HTTP.new(url.host, url.port)
+    http.use_ssl = true
+    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+    request = Net::HTTP::Get.new(url)
+    request["x-api-key"] = "#{$yahoo_key}"
+    response = http.request(request)
+
+    stock_info = JSON.parse(response.body)
+
+    ask_price = stock_info["quoteResponse"]["result"][0]["ask"]
+    company_name = stock_info["quoteResponse"]["result"][0]["longName"]
+    stock_info = response.read_body
+
+    stock = Stock.find_by(symbol: params[:symbol])
     stock.user_id = current_user.id
     stock.cost_basis = params[:cost_basis] || stock.cost_basis
-    stock.current_price = params[:current_price] || stock.current_price
+    stock.current_price = ask_price
     stock.quantity = params[:quantity] || stock.quantity
     stock.sector_id = params[:sector_id] || stock.sector_id
     stock.industry_id = params[:industry_id] || stock.industry_id
