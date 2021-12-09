@@ -19,10 +19,13 @@ Content-Type: application/json
 }
 
 ### UPDATE STOCK###
-PATCH http://localhost:3000/stocks/EPD.json
+PATCH http://localhost:3000/stocks/CCJ.json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2MzkxNDY2OTR9.iLCfJRty6zmOH9oOHIPbEI-iHvZvQJ9ERc9ULO_J-0Y
 Content-Type: application/json
 
+{
+  "sector": "Uranium"
+}
 
 ### Destroy STOCK###
 DELETE http://localhost:3000/stocks/2

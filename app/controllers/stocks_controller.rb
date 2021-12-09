@@ -101,7 +101,7 @@ class StocksController < ApplicationController
     require 'net/http'
     require 'openssl'
     require 'JSON'
-
+    # using separate apis may not work since sectors/industries differ (sigh)
     url = URI("https://yfapi.net/v6/finance/quote?symbols=#{params[:symbol]}")
 
     http = Net::HTTP.new(url.host, url.port)
@@ -124,6 +124,7 @@ class StocksController < ApplicationController
     stock.current_price = ask_price
     stock.quantity = params[:quantity] || stock.quantity
     stock.sector_id = params[:sector_id] || stock.sector_id
+    stock.sector.sector = params[:sector] || stock.sector.sector
     stock.industry_id = params[:industry_id] || stock.industry_id
     if stock.save
       render json: stock
