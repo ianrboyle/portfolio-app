@@ -21,8 +21,9 @@ class StocksController < ApplicationController
     if stock_exist
       stock = stock_exist
       original_total_cost_basis = stock.cost_basis * stock.quantity
-      stock.quantity += params[:quantity]
-      stock.cost_basis = (original_total_cost_basis + (params[:cost_basis]*params[:quantity]))/stock.quantity
+      original_quantity = stock.quantity
+      stock.quantity = original_quantity.to_f + params[:quantity].to_f
+      stock.cost_basis = ((original_total_cost_basis.to_f + (params[:cost_basis].to_f * params[:quantity].to_f))/stock.quantity).round(2)
       stock.current_price = stock_info[0]["price"]
     #check to see if the sector and industry already exists
  

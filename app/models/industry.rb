@@ -8,4 +8,7 @@ class Industry < ApplicationRecord
     (industry_value/account_value * 100).round(2)
   end
 
+  def sector_percent_of_industry
+    industry_sectors = sectors.map{|sector| (sector.sector_percent_of_account/industry_percent_of_account * 100).round(2)}
+  end
 end

@@ -1,6 +1,7 @@
 class Sector < ApplicationRecord
   # belongs_to :user
   has_many :stocks
+
   def sector_percent_of_account
     all_stocks = Stock.all
     account_value = all_stocks.reduce(0){|sum, stock| sum + stock.current_total_value}
