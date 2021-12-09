@@ -9,22 +9,22 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzc4NjYxM
 Content-Type: application/json
 
 ### CREATE STOCK###
-POST http://localhost:3000/stocks/AMZN
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzg5MDUxNjR9.hisfEfJPC_crPHuNHkonEZQ9mqHcY7yG4PN_WL7eLLU
+POST http://localhost:3000/stocks/CCJ
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2MzkxNDY2OTR9.iLCfJRty6zmOH9oOHIPbEI-iHvZvQJ9ERc9ULO_J-0Y
 Content-Type: application/json
 
 {
-  "cost_basis": 3500,
-  "quantity": 5
+  "quantity": 10,
+  "cost_basis": 12
 }
 
 ### UPDATE STOCK###
-PATCH http://localhost:3000/stocks/CCJ.json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2MzkwNjgyNjl9.hmMDKd9SKqxmTI84i_KhmuI88cfP3LMXy1JZ2-POFF8
+PATCH http://localhost:3000/stocks/EPD.json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2MzkxNDY2OTR9.iLCfJRty6zmOH9oOHIPbEI-iHvZvQJ9ERc9ULO_J-0Y
 Content-Type: application/json
 
 
 ### Destroy STOCK###
-DELETE http://localhost:3000/stocks/13
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJleHAiOjE2Mzg2NDA1MzR9.h6rIBQdSOn0ytGzFDb0-wPiqHy493oe59kQ-KVEZGQU
+DELETE http://localhost:3000/stocks/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2MzkxNDY2OTR9.iLCfJRty6zmOH9oOHIPbEI-iHvZvQJ9ERc9ULO_J-0Y
 Content-Type: application/json

@@ -14,10 +14,19 @@ class StocksController < ApplicationController
     require './.api_key.rb'
     response = HTTP.get("https://financialmodelingprep.com/api/v3/profile/#{params[:symbol]}?apikey=#{$api_key}")
     stock_info = response.parse(:json)
-    #check to see if the sector already exists
+    #check to see if stock already exists
+    stock_exist = Stock.find_by(symbol: params[:symbol])
     sector = Sector.find_by(sector: stock_info[0]["sector"])
     industry = Industry.find_by(industry: stock_info[0]["industry"])
-    if sector && industry
+    if stock_exist
+      stock = stock_exist
+      original_total_cost_basis = stock.cost_basis * stock.quantity
+      stock.quantity += params[:quantity]
+      stock.cost_basis = (original_total_cost_basis + (params[:cost_basis]*params[:quantity]))/stock.quantity
+      stock.current_price = stock_info[0]["price"]
+    #check to see if the sector and industry already exists
+ 
+    elsif sector && industry
       stock = Stock.new(
         user_id: current_user.id,
         symbol: stock_info[0]["symbol"],
@@ -28,6 +37,7 @@ class StocksController < ApplicationController
         sector_id: sector.id,
         industry_id: industry.id
       )
+    #check to see if the sector exists, but not the industry
     elsif sector && !industry
       new_industry = Industry.new(industry: stock_info[0]["industry"])
       new_industry.save
@@ -41,6 +51,7 @@ class StocksController < ApplicationController
         sector_id: sector.id,
         industry_id: new_industry.id
       )
+      #check to see if the industry exists, but not the sector
     elsif industry && !sector
       new_sector = Sector.new(
         sector: stock_info[0]["sector"]
@@ -56,6 +67,7 @@ class StocksController < ApplicationController
         sector_id: new_sector.id,
         industry_id: industry.id
       )
+      #if neither stock, nor sector, nor industry exist
     else
       new_sector = Sector.new(
         sector: stock_info[0]["sector"]
