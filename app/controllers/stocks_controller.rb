@@ -2,6 +2,13 @@ class StocksController < ApplicationController
   before_action :authenticate_user
   def index
     stocks = current_user.stocks
+    stocks.each{|stock|
+      require './.api_key.rb'
+      response = HTTP.get("https://financialmodelingprep.com/api/v3/profile/#{stock.symbol}?apikey=#{$api_key}")
+      stock_info = response.parse(:json)
+      stock.current_price = stock_info[0]["price"]
+      stock.save
+    }
     render json: stocks
   end
 
