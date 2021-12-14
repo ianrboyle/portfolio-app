@@ -2,6 +2,10 @@ class Sector < ApplicationRecord
   # belongs_to :user
   has_many :stocks
   has_many :industries, through: :stocks
+
+  def sector_value
+    stocks.reduce(0){|sum, stock| sum + stock.current_total_value}
+  end
   def sector_percent_of_account
     all_stocks = Stock.all
     account_value = all_stocks.reduce(0){|sum, stock| sum + stock.current_total_value}
@@ -11,6 +15,8 @@ class Sector < ApplicationRecord
   end
 
   def industry_percent_of_sector
-    
+    sector_industries = industries.map{|industry| {"Industry ID": industry.id, "Industry": industry.industry, "Industry % of Sector": (industry.industry_value/sector_value * 100).round(2)  }}
+    # sector_industries = industries.map{|industry| industry}
+    sector_industries = sector_industries.uniq
   end
 end
