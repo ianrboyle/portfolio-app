@@ -1,6 +1,6 @@
 ###INDEX STOCKS####
 GET http://localhost:3000/stocks
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzk1MDM0ODh9.WaKWEHCqdnPxROJP8GOUDaU71rSQ4WpmGBtFpGH24cY
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzk1ODMwMTl9.95UDFVZF21UjMEUJzw1-R-V58Y-GXOyTvRHqvo8nWQs
 Content-Type: application/json
 
 ###Show STOCK####
@@ -9,25 +9,26 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzc4NjYxM
 Content-Type: application/json
 
 ### CREATE STOCK###
-POST http://localhost:3000/stocks/UUUU
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2MzkxNDY2OTR9.iLCfJRty6zmOH9oOHIPbEI-iHvZvQJ9ERc9ULO_J-0Y
+POST http://localhost:3000/stocks/CBBHF
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzk1ODMwMTl9.95UDFVZF21UjMEUJzw1-R-V58Y-GXOyTvRHqvo8nWQs
 Content-Type: application/json
 
 {
-  "quantity": 1,
-  "cost_basis": 9
+  "quantity": 1000,
+  "cost_basis": 0.22
 }
 
 ### UPDATE STOCK###
 PATCH http://localhost:3000/stocks/CCJ.json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2MzkxNDY2OTR9.iLCfJRty6zmOH9oOHIPbEI-iHvZvQJ9ERc9ULO_J-0Y
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzk1MDM0ODh9.WaKWEHCqdnPxROJP8GOUDaU71rSQ4WpmGBtFpGH24cY
 Content-Type: application/json
 
 {
-  "sector": "Uranium"
+  "sector_id": 1,
+  "industry_id": 1
 }
 
 ### Destroy STOCK###
-DELETE http://localhost:3000/stocks/2
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2MzkxNDY2OTR9.iLCfJRty6zmOH9oOHIPbEI-iHvZvQJ9ERc9ULO_J-0Y
+DELETE http://localhost:3000/stocks/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzk1ODMwMTl9.95UDFVZF21UjMEUJzw1-R-V58Y-GXOyTvRHqvo8nWQs
 Content-Type: application/json

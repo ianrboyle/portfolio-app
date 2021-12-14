@@ -24,8 +24,12 @@ class IndustriesController < ApplicationController
   def destroy
     industry = Industry.find_by(id: params[:id])
     stocks = Stock.find_by(industry_id: industry.id)
-    stocks.destroy
-    industry.destroy
+    if stocks
+      stocks.destroy
+      industry.destroy
+    else
+      industry.destroy
+    end
     render json: {message: "Industry removed from portfolio and all associated stocks."}
   end
 end
