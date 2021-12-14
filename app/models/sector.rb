@@ -15,7 +15,7 @@ class Sector < ApplicationRecord
   end
 
   def industry_percent_of_sector
-    sector_industries = industries.map{|industry| {"Industry ID": industry.id, "Industry": industry.industry, "Industry % of Sector": (industry.industry_value/sector_value * 100).round(2)  }}
+    sector_industries = industries.map{|industry| {"industry_id": industry.id, "industry": industry.industry, "industry_percent": (industry.industry_value/sector_value * 100).round(2)  }}
     # sector_industries = industries.map{|industry| industry}
     sector_industries = sector_industries.uniq
   end
