@@ -10,4 +10,4 @@ Content-Type: application/json
 }
 
 ### DELETE SECTOR
-DELETE http://localhost:3000/sectors/10.json
+DELETE http://localhost:3000/sectors/1.json

@@ -1,3 +1,9 @@
+###INDEX
+GET http://localhost:3000/industries
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzk1ODQ4ODN9.20Je_dTaFGgJsxrErIV7RXmezF_NJpssT2NTT39ad-0
+Content-Type: application/json
+
+### CREATE
 POST http://localhost:3000/industries
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJleHAiOjE2Mzg2NDA1MzR9.h6rIBQdSOn0ytGzFDb0-wPiqHy493oe59kQ-KVEZGQU 
 Content-Type: application/json
@@ -7,4 +13,4 @@ Content-Type: application/json
 }
 
 ### DELETE Industry
-DELETE http://localhost:3000/industries/13.json
+DELETE http://localhost:3000/industries/1.json

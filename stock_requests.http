@@ -9,13 +9,13 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzc4NjYxM
 Content-Type: application/json
 
 ### CREATE STOCK###
-POST http://localhost:3000/stocks/CBBHF
+POST http://localhost:3000/stocks/EPD
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzk1ODMwMTl9.95UDFVZF21UjMEUJzw1-R-V58Y-GXOyTvRHqvo8nWQs
 Content-Type: application/json
 
 {
-  "quantity": 1000,
-  "cost_basis": 0.22
+  "quantity": 10,
+  "cost_basis": 16
 }
 
 ### UPDATE STOCK###
