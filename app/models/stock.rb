@@ -3,35 +3,51 @@ class Stock < ApplicationRecord
   belongs_to :sector
   belongs_to :industry
 
+  #calculates the current total value for an individual stock
   def current_total_value
     (quantity * current_price).round(3)
   end
-
-  def percent_of_account
-    stocks = Stock.where(user_id: user.id)
-    account_value = stocks.reduce(0){|sum, stock| sum + stock.current_total_value}
-    #how do we select the current stock?
-    (current_total_value/account_value * 100).round(2)
+  #calculates the cost_basis value for an individual stock
+  def current_stock_cost_basis
+    (quantity * cost_basis).round(3)
   end
 
+  #calculates the current account value
+  def current_account_value
+    stocks = Stock.where(user_id: user.id)
+    stocks.reduce(0){|sum, stock| sum + stock.current_total_value}
+  end
+  
+  #calculates the original cost basis for all stocks
+  def total_cost_basis
+    stocks = Stock.where(user_id: user.id)
+    stocks.reduce(0){|sum, stock| sum + stock.current_stock_cost_basis}
+  end
+
+  #calculates what % a stock is of the overall portfolio
+  def percent_of_account
+    # stocks = Stock.where(user_id: user.id)
+    # account_value = stocks.reduce(0){|sum, stock| sum + stock.current_total_value}
+    #how do we select the current stock?
+    (current_total_value/current_account_value * 100).round(2)
+  end
+
+  #calculates the total gain/loss for an individual stock
   def total_gain_loss
     ((current_price - cost_basis) * quantity).round(3)
   end
 
+  #calculates the total gain/loss % for an individual stock
   def total_gain_loss_percent
-    ((total_gain_loss/(quantity * cost_basis))*100).round(2)
+    ((total_gain_loss/current_stock_cost_basis)*100).round(2)
   end
 
-  # def update_price
-  #   stocks = Stock.all 
-  #   require './.api_key.rb'
-    
-    
-  #   stocks.each{|stock| 
-  #     response = HTTP.get("https://financialmodelingprep.com/api/v3/profile/#{stock.symbol}?apikey=#{$api_key}")
-  #     stock_info = response.parse(:json)
-  #     stock.current_price = stock_info[0]["price"]
-  #     stock.save
-  #   }
-  # end
+  def account_total_gain_loss
+    (current_account_value - total_cost_basis).round(3)
+  end
+
+  def account_total_gain_loss_percent
+    ((account_total_gain_loss/total_cost_basis)*100).round(2)
+  end
+
 end

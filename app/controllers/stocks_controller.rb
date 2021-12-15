@@ -8,17 +8,6 @@ class StocksController < ApplicationController
     require './.api_key.rb'
     stocks = current_user.stocks
     stocks.each{|stock|
-      quote_url = URI("https://yfapi.net/v6/finance/quote?symbols=#{stock.symbol}")
-      quote_http = Net::HTTP.new(quote_url.host, quote_url.port)
-      quote_http.use_ssl = true
-      quote_http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-
-      q_request = Net::HTTP::Get.new(quote_url)
-      q_request["x-api-key"] = "#{$yahoo_key}"
-
-      q_response = quote_http.request(q_request)
-      q_result = JSON.parse(q_response.body)
-
       response = HTTP.get("https://financialmodelingprep.com/api/v3/profile/#{stock.symbol}?apikey=#{$api_key}")
       f_m_info = response.parse(:json)
       if f_m_info[0]
@@ -26,6 +15,16 @@ class StocksController < ApplicationController
         stock.current_price = ask_price
         stock.save
       else
+        quote_url = URI("https://yfapi.net/v6/finance/quote?symbols=#{stock.symbol}")
+        quote_http = Net::HTTP.new(quote_url.host, quote_url.port)
+        quote_http.use_ssl = true
+        quote_http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+  
+        q_request = Net::HTTP::Get.new(quote_url)
+        q_request["x-api-key"] = "#{$yahoo_key}"
+  
+        q_response = quote_http.request(q_request)
+        q_result = JSON.parse(q_response.body)
         ask_price = q_result["quoteResponse"]["result"][0]["regularMarketPrice"]
         stock.current_price = ask_price
         stock.save

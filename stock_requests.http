@@ -1,6 +1,6 @@
 ###INDEX STOCKS####
 GET http://localhost:3000/stocks
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzk1ODMwMTl9.95UDFVZF21UjMEUJzw1-R-V58Y-GXOyTvRHqvo8nWQs
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzk2MTU3MTN9.1OiY4KWdaIE-rrEY0VsUkgEB4OxQWLjCWxrXpHmFZ9o
 Content-Type: application/json
 
 ###Show STOCK####
@@ -29,6 +29,6 @@ Content-Type: application/json
 }
 
 ### Destroy STOCK###
-DELETE http://localhost:3000/stocks/1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzk1ODMwMTl9.95UDFVZF21UjMEUJzw1-R-V58Y-GXOyTvRHqvo8nWQs
+DELETE http://localhost:3000/stocks/19
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzk2MTU3MTN9.1OiY4KWdaIE-rrEY0VsUkgEB4OxQWLjCWxrXpHmFZ9o
 Content-Type: application/json
