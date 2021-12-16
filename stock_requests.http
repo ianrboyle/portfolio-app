@@ -19,13 +19,12 @@ Content-Type: application/json
 }
 
 ### UPDATE STOCK###
-PATCH http://localhost:3000/stocks/CCJ.json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzk1MDM0ODh9.WaKWEHCqdnPxROJP8GOUDaU71rSQ4WpmGBtFpGH24cY
+PATCH http://localhost:3000/stocks/UUUU.json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzk3NjgyODF9.5BV3iGpQfMjNvWnHzUQLb2qCbzi404elmvch96YIn7c
 Content-Type: application/json
 
 {
-  "sector_id": 1,
-  "industry_id": 1
+  "cost_basis": 5
 }
 
 ### Destroy STOCK###

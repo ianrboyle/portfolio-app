@@ -50,4 +50,5 @@ class Stock < ApplicationRecord
     ((account_total_gain_loss/total_cost_basis)*100).round(2)
   end
 
+
 end
