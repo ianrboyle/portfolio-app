@@ -28,6 +28,6 @@ Content-Type: application/json
 }
 
 ### Destroy STOCK###
-DELETE http://localhost:3000/stocks/19
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzk2MTU3MTN9.1OiY4KWdaIE-rrEY0VsUkgEB4OxQWLjCWxrXpHmFZ9o
+DELETE http://localhost:3000/stocks/34
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzk4NjE2Mzd9.DYfEq3NPCufz5mRzXDsqMMByAk60wVaC44q-ETavYuM
 Content-Type: application/json
