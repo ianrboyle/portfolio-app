@@ -52,5 +52,9 @@ class Stock < ApplicationRecord
   def stock_percent_of_sector
     ((current_total_value/sector.sector_value)*100).round(2)
   end
+  
+  def stock_percent_of_industry
+    ((current_total_value/industry.industry_value)*100).round(2)
+  end
 
 end
