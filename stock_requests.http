@@ -1,6 +1,6 @@
 ###INDEX STOCKS####
 GET http://localhost:3000/stocks
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzk2MTU3MTN9.1OiY4KWdaIE-rrEY0VsUkgEB4OxQWLjCWxrXpHmFZ9o
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzk4NDE3Nzh9.xF6KdUETSSf0ZF43DpF_BjBpdxb3txsEYagNfQBRekQ
 Content-Type: application/json
 
 ###Show STOCK####

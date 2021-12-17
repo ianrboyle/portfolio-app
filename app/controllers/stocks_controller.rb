@@ -1,12 +1,16 @@
 class StocksController < ApplicationController
   before_action :authenticate_user
   def index
+    require 'date'
     require 'uri'
     require 'net/http'
     require 'openssl'
     require 'JSON'
     require './.api_key.rb'
+    
+    
     stocks = current_user.stocks
+    
     stocks.each{|stock|
       response = HTTP.get("https://financialmodelingprep.com/api/v3/profile/#{stock.symbol}?apikey=#{$api_key}")
       f_m_info = response.parse(:json)
@@ -163,7 +167,7 @@ class StocksController < ApplicationController
     require 'net/http'
     require 'openssl'
     require 'JSON'
-    # using separate apis may not work since sectors/industries differ (sigh)
+    
     url = URI("https://yfapi.net/v6/finance/quote?symbols=#{params[:symbol]}")
 
     http = Net::HTTP.new(url.host, url.port)

@@ -49,6 +49,8 @@ class Stock < ApplicationRecord
   def account_total_gain_loss_percent
     ((account_total_gain_loss/total_cost_basis)*100).round(2)
   end
-
+  def stock_percent_of_sector
+    ((current_total_value/sector.sector_value)*100).round(2)
+  end
 
 end
