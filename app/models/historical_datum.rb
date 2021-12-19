@@ -1,0 +1,2 @@
+class HistoricalDatum < ApplicationRecord
+end

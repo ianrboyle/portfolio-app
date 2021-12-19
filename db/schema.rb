@@ -10,10 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_06_193431) do
+ActiveRecord::Schema.define(version: 2021_12_19_221123) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "historical_data", force: :cascade do |t|
+    t.date "date"
+    t.integer "user_id"
+    t.float "portfolio_value"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "historicals", force: :cascade do |t|
+    t.date "date"
+    t.integer "user_id"
+    t.float "portfolio_value"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "industries", force: :cascade do |t|
     t.string "industry"

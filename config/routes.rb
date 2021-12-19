@@ -21,6 +21,10 @@ Rails.application.routes.draw do
   post "/industries" => "industries#create"
   delete "/industries/:id" => "industries#destroy"
 
+  ### HISTORICAL ROUTES
+  get "/historicals" => "historicals#index"
+  post "/historicals" => "historicals#create"
+  delete "/historicals/:id" => "historicals#destroy"
   ###USER ROUTES###
   post "/users" => "users#create"
 
