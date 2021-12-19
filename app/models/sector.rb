@@ -24,4 +24,5 @@ class Sector < ApplicationRecord
     # sector_industries = industries.map{|industry| industry}
     sector_industries = sector_industries.uniq
   end
+
 end
