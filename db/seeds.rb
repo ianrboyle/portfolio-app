@@ -5,3 +5,15 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+
+
+index = 0
+while index < 31
+  number = rand(700..1200)
+  other = rand(0..9)
+  other = other.to_f/100
+  number = number + other
+  historical = Historical.create({user_id: 1, portfolio_value: number, date: (Date.today()-index)})
+  index += 1
+end
