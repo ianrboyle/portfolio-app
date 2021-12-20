@@ -1,2 +1,0 @@
-class HistoricalDatum < ApplicationRecord
-end

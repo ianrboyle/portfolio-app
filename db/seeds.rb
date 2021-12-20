@@ -8,7 +8,7 @@
 
 
 
-index = 31
+index = 60
 while index >= 0
   number = rand(700..1200)
   other = rand(0..9)

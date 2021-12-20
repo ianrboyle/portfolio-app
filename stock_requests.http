@@ -9,13 +9,13 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzc4NjYxM
 Content-Type: application/json
 
 ### CREATE STOCK###
-POST http://localhost:3000/stocks/EPD
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzk1ODMwMTl9.95UDFVZF21UjMEUJzw1-R-V58Y-GXOyTvRHqvo8nWQs
+POST http://localhost:3000/stocks/CCJ
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2NDAxMDk1MjF9.g6nPfvBxlx1pcHCrE7xhDnhX_t1GAFpnlhg6K1gigRc
 Content-Type: application/json
 
 {
-  "quantity": 10,
-  "cost_basis": 16
+  "quantity": 1,
+  "cost_basis": 25
 }
 
 ### UPDATE STOCK###
@@ -28,6 +28,6 @@ Content-Type: application/json
 }
 
 ### Destroy STOCK###
-DELETE http://localhost:3000/stocks/34
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzk4NjE2Mzd9.DYfEq3NPCufz5mRzXDsqMMByAk60wVaC44q-ETavYuM
+DELETE http://localhost:3000/stocks/47
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2NDAxMDk1MjF9.g6nPfvBxlx1pcHCrE7xhDnhX_t1GAFpnlhg6K1gigRc
 Content-Type: application/json

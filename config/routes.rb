@@ -26,7 +26,8 @@ Rails.application.routes.draw do
   post "/historicals" => "historicals#create"
   delete "/historicals/:id" => "historicals#destroy"
 
-  
+  ###NEWS ROUTES
+  get "news" => "news#index"
   ###USER ROUTES###
   post "/users" => "users#create"
 

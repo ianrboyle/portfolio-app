@@ -11,10 +11,8 @@ class IndustriesController < ApplicationController
 
   def create
     industry = Industry.new(
-      user_id: current_user.id,
       industry: params[:industry]
     )
-    industry.save
     if industry.save
       render json: industry
     else

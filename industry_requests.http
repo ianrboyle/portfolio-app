@@ -4,7 +4,7 @@ Content-Type: application/json
 
 ### CREATE
 POST http://localhost:3000/industries
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJleHAiOjE2Mzg2NDA1MzR9.h6rIBQdSOn0ytGzFDb0-wPiqHy493oe59kQ-KVEZGQU 
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2NDAxMDk1MjF9.g6nPfvBxlx1pcHCrE7xhDnhX_t1GAFpnlhg6K1gigRc 
 Content-Type: application/json
 
 {

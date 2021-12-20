@@ -3,9 +3,12 @@ class HistoricalsController < ApplicationController
   def index
     historicals = Historical.all 
     render json: historicals
-
   end
-
+  #I only want to show the most current historical data when this show method is called
+  def show
+    historical = Historical.last
+    render json: historical
+  end
   def create
     stocks = current_user.stocks
     historical = Historical.new(

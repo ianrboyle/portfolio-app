@@ -52,6 +52,8 @@ class StocksController < ApplicationController
     ### Quote Summary API call
     quote_summary_url = URI("https://yfapi.net/v11/finance/quoteSummary/#{params[:symbol]}?lang=en&region=US&modules=defaultKeyStatistics%2CassetProfile")
 
+   
+
     quote_summary_http = Net::HTTP.new(quote_summary_url.host, quote_summary_url.port)
     quote_summary_http.use_ssl = true
     quote_summary_http.verify_mode = OpenSSL::SSL::VERIFY_NONE
@@ -73,13 +75,13 @@ class StocksController < ApplicationController
 
     q_response = quote_http.request(q_request)
     q_result = JSON.parse(q_response.body)
-
+    
     quote_industry = q_s_result["quoteSummary"]["result"][0]["assetProfile"]["industry"]
     quote_sector = q_s_result["quoteSummary"]["result"][0]["assetProfile"]["sector"]
     quote_ask_price = q_result["quoteResponse"]["result"][0]["regularMarketPrice"]
     quote_stock_symbol = q_result["quoteResponse"]["result"][0]["symbol"]
     quote_company_name = q_result["quoteResponse"]["result"][0]["longName"]
-
+  
     #check to see if stock already exists
     stock_exist = Stock.find_by(symbol: params[:symbol])
     sector = Sector.find_by(sector: quote_sector)
@@ -119,29 +121,30 @@ class StocksController < ApplicationController
         industry_id: new_industry.id
       )
       #check to see if the industry exists, but not the sector
-    elsif industry && !sector
-      new_sector = Sector.new(
-        sector: quote_sector
-      )
-      new_sector.save
-      stock = Stock.new(
-        user_id: current_user.id,
-        symbol: quote_stock_symbol,
-        company_name: quote_company_name,
-        cost_basis: params[:cost_basis],
-        current_price: quote_ask_price,
-        quantity: params[:quantity],
-        sector_id: new_sector.id,
-        industry_id: industry.id
-      )
+      elsif industry && !sector
+        new_sector = Sector.new(
+          sector: quote_sector
+        )
+        new_sector.save
+        stock = Stock.new(
+          user_id: current_user.id,
+          symbol: quote_stock_symbol,
+          company_name: quote_company_name,
+          cost_basis: params[:cost_basis],
+          current_price: quote_ask_price,
+          quantity: params[:quantity],
+          sector_id: new_sector.id,
+          industry_id: industry.id
+        )
       #if neither stock, nor sector, nor industry exist
     else
+      new_industry = Industry.new(industry: quote_industry)
+      new_industry.save
       new_sector = Sector.new(
         sector: quote_sector
       )
       new_sector.save
-      new_industry = Industry.new(industry: quote_industry)
-      new_industry.save
+  
       stock = Stock.new(
         user_id: current_user.id,
         symbol: quote_stock_symbol,

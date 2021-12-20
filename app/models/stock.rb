@@ -14,8 +14,8 @@ class Stock < ApplicationRecord
 
   #calculates the current account value
   def current_account_value
-    stocks = Stock.where(user_id: user.id)
-    stocks.reduce(0){|sum, stock| sum + stock.current_total_value}
+    stocks = Stock.where(user_id: user.id) 
+    stocks.reduce(0){|sum, stock| sum + stock.current_total_value}.round(3)
   end
   
   #calculates the original cost basis for all stocks
