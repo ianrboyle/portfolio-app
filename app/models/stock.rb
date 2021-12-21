@@ -5,17 +5,17 @@ class Stock < ApplicationRecord
 
   #calculates the current total value for an individual stock
   def current_total_value
-    (quantity * current_price).round(3)
+    (quantity * current_price).round(2)
   end
   #calculates the cost_basis value for an individual stock
   def current_stock_cost_basis
-    (quantity * cost_basis).round(3)
+    (quantity * cost_basis).round(2)
   end
 
   #calculates the current account value
   def current_account_value
     stocks = Stock.where(user_id: user.id) 
-    stocks.reduce(0){|sum, stock| sum + stock.current_total_value}.round(3)
+    stocks.reduce(0){|sum, stock| sum + stock.current_total_value}.round(2)
   end
   
   #calculates the original cost basis for all stocks
@@ -34,7 +34,7 @@ class Stock < ApplicationRecord
 
   #calculates the total gain/loss for an individual stock
   def total_gain_loss
-    ((current_price - cost_basis) * quantity).round(3)
+    ((current_price - cost_basis) * quantity).round(2)
   end
 
   #calculates the total gain/loss % for an individual stock
@@ -43,7 +43,7 @@ class Stock < ApplicationRecord
   end
 
   def account_total_gain_loss
-    (current_account_value - total_cost_basis).round(3)
+    (current_account_value - total_cost_basis).round(2)
   end
 
   def account_total_gain_loss_percent

@@ -12,4 +12,4 @@ Content-Type: application/json
 }
 
 ### DELETE Industry
-DELETE http://localhost:3000/industries/1.json
+DELETE http://localhost:3000/industries/34.json

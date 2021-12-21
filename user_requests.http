@@ -8,3 +8,6 @@ Content-Type: application/json
   "password": "password",
   "password_confirmation": "password"
 }
+### Users destroy (signup)
+DELETE http://localhost:3000/users/4
+Content-Type: application/json

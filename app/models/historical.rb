@@ -1,10 +1,11 @@
 class Historical < ApplicationRecord
+  belongs_to :user
   def day_gain_loss
     yesterday_date = date-1
     
     yesterday = Historical.find_by(date: yesterday_date)
     if yesterday
-      (portfolio_value - yesterday.portfolio_value).round(3) 
+      (portfolio_value - yesterday.portfolio_value).round(2) 
     else
       return "no data"
     end
@@ -22,7 +23,7 @@ class Historical < ApplicationRecord
     last_month_date = date - 30
     last_month = Historical.find_by(date: last_month_date)
     if last_month
-      (portfolio_value - last_month.portfolio_value).round(3)
+      (portfolio_value - last_month.portfolio_value).round(2)
     end
   end
 

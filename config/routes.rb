@@ -30,6 +30,7 @@ Rails.application.routes.draw do
   get "news" => "news#index"
   ###USER ROUTES###
   post "/users" => "users#create"
+  delete "/users/:id" => "users#destroy"
 
   ###SESSIONS ROUTES###
   post "/sessions" => "sessions#create"

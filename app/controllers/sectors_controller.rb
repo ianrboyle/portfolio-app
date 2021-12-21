@@ -23,9 +23,12 @@ class SectorsController < ApplicationController
 
   def destroy
     sector = Sector.find_by(id: params[:id])
-    stocks = Stock.find_by(sector_id: sector.id)
+    
+    stocks = Stock.where(sector_id: sector.id)
+    industries = sector.industries
     if stocks
-      stocks.destroy
+      stocks.each{|stock| stock.destroy}
+      industries.each{|industry| industry.destroy}
       sector.destroy
     else
       sector.destroy

@@ -1,12 +1,12 @@
 class HistoricalsController < ApplicationController
   before_action :authenticate_user
   def index
-    historicals = Historical.all 
+    historicals = current_user.historicals
     render json: historicals
   end
   #I only want to show the most current historical data when this show method is called
   def show
-    historical = Historical.last
+    historical = current_user.historicals.last
     render json: historical
   end
   def create
