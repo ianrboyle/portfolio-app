@@ -7,7 +7,6 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 
-
 index = 60
 while index >= 0
   number = rand(700..1200)

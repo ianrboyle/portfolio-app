@@ -1,21 +1,21 @@
 ###INDEX STOCKS####
 GET http://localhost:3000/stocks
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2NDAyMDY1MzZ9.z0lH31rzPNTutAH_cJSJW9t0oA6CWvJKNg0ILRmahUM
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2NDAyOTUwODB9.1vejGoIRTleeHL2K4zuQ3Q4RATy7BfQFXAwWoYqwdmo
 Content-Type: application/json
 
 ###Show STOCK####
-GET http://localhost:3000/stocks/1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2Mzc4NjYxMDN9.pHUFuTIjII_pf5YLovM44wTXmvH5mVQ3Rt9eg46vhaY
+GET http://localhost:3000/stocks/92
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2NDAyOTU1NzF9.RQH69G2vxnbjyzV_AabncBOmPcvi7rVJSgGCJVPBesw
 Content-Type: application/json
 
 ### CREATE STOCK###
-POST http://localhost:3000/stocks/CCJ
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2NDAxMDk1MjF9.g6nPfvBxlx1pcHCrE7xhDnhX_t1GAFpnlhg6K1gigRc
+POST http://localhost:3000/stocks/ENB
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo1LCJleHAiOjE2NDAyOTU4NzJ9.LPsToGNiN3SVcpa2SHpXMTUwjKnT6AM79OsRYXJV14A
 Content-Type: application/json
 
 {
-  "quantity": 1,
-  "cost_basis": 25
+  "quantity": 10,
+  "cost_basis": 15
 }
 
 ### UPDATE STOCK###
@@ -28,6 +28,6 @@ Content-Type: application/json
 }
 
 ### Destroy STOCK###
-DELETE http://localhost:3000/stocks/66
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2NDAyMDY1MzZ9.z0lH31rzPNTutAH_cJSJW9t0oA6CWvJKNg0ILRmahUM
+DELETE http://localhost:3000/stocks/88
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2NDAyOTU1NzF9.RQH69G2vxnbjyzV_AabncBOmPcvi7rVJSgGCJVPBesw
 Content-Type: application/json

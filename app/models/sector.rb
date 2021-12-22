@@ -1,7 +1,9 @@
 class Sector < ApplicationRecord
-  # belongs_to :user
+
   has_many :stocks
   has_many :industries, through: :stocks
+
+
 
   def sector_value
     value = stocks.reduce(0){|sum, stock| sum + stock.current_total_value}

@@ -57,4 +57,10 @@ class Stock < ApplicationRecord
     ((current_total_value/industry.industry_value)*100).round(2)
   end
 
+  def sector_values
+    sectors_stocks = Stock.where(user_id: user.id)
+    value = sectors_stocks.reduce(0){|sum, stock| sum + stock.current_total_value}
+    value.round(2)
+  end
+
 end
