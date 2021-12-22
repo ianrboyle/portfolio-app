@@ -1,11 +1,11 @@
 ###CREATE 
 POST http://localhost:3000/historicals
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2NDAwMzg2MjZ9.el_ssoQ7RkmIUMs6i8tqhtxx0fOtGqH1oozUdlATIAA
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo1LCJleHAiOjE2NDAyODkzMTV9.pBhR07myfgSBoi_3xEoQXb94CVshsx8GsMeQktVrUMs
 Content-Type: application/json
 
 ###INDEX 
 GET http://localhost:3000/historicals
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2NDAwMzg2MjZ9.el_ssoQ7RkmIUMs6i8tqhtxx0fOtGqH1oozUdlATIAA
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo1LCJleHAiOjE2NDAyODkzMTV9.pBhR07myfgSBoi_3xEoQXb94CVshsx8GsMeQktVrUMs
 Content-Type: application/json
 
 

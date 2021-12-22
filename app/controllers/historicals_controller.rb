@@ -10,12 +10,23 @@ class HistoricalsController < ApplicationController
     render json: historical
   end
   def create
+    historicals = Historical.where(date: Date.today())
+    historicals.each{|historical| historical.destroy}
     stocks = current_user.stocks
-    historical = Historical.new(
-      user_id: current_user.id,
-      date: Date.today(),
-      portfolio_value: stocks[0].current_account_value
-    )
+    if stocks
+      
+      historical = Historical.new(
+        user_id: current_user.id,
+        date: Date.today(),
+        portfolio_value: stocks[0].current_account_value
+      )
+    else
+      historical = Historical.new(
+        user_id: current_user.id,
+        date: Date.today(),
+        portfolio_value: 0
+      )
+    end
     if historical.save
       render json: historical
     else

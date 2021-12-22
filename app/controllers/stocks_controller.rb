@@ -83,7 +83,7 @@ class StocksController < ApplicationController
     quote_company_name = q_result["quoteResponse"]["result"][0]["longName"]
   
     #check to see if stock already exists
-    stock_exist = Stock.find_by(symbol: params[:symbol])
+    stock_exist = Stock.find_by(symbol: params[:symbol], user_id: current_user.id)
     sector = Sector.find_by(sector: quote_sector)
     industry = Industry.find_by(industry: quote_industry)
     if stock_exist
