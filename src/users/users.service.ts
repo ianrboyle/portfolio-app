@@ -31,7 +31,6 @@ export class UsersService {
 
   async remove(id: number) {
     const user = await this.findOne(id);
-    console.log(user);
     if (!user) {
       console.log('error hit');
       throw new NotFoundException('user not found');
