@@ -1,3 +1,4 @@
+import { Position } from 'src/positions/position.entity';
 import {
   AfterInsert,
   AfterRemove,
@@ -5,16 +6,22 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
+  OneToMany,
 } from 'typeorm';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
+
   @Column()
   email: string;
+
   @Column()
   password: string;
+
+  @OneToMany(() => Position, (position) => position.user)
+  positions: Position[];
 
   @AfterInsert()
   logInsert() {

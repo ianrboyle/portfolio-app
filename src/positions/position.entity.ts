@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from 'src/users/user.entity';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Position {
@@ -9,17 +10,15 @@ export class Position {
   symbol: string;
 
   @Column()
-  sharesOwned?: number;
+  quantity: number;
 
   @Column()
-  averageCostBasis?: number;
+  costPerShare: number;
 
-  // @Column()
-  // userId: number;
+  @ManyToOne(() => User, (user) => user.positions)
+  user: User;
 
-  // @Column()
-  // sectorId: number;
-
-  // @Column()
-  // industryId: number;
+  // @OneToOne(() => CompanyProfile, (companyProfile) => companyProfile.position)
+  // @JoinColumn()
+  // companyProfile: CompanyProfile;
 }
