@@ -1,4 +1,4 @@
-import { Position } from 'src/positions/position.entity';
+import { Position } from '../positions/position.entity';
 import {
   AfterInsert,
   AfterRemove,
