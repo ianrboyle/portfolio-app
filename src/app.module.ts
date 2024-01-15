@@ -8,6 +8,10 @@ import { PositionsModule } from './positions/positions.module';
 import { User } from './users/user.entity';
 import { Position } from './positions/position.entity';
 import { APP_PIPE } from '@nestjs/core';
+
+import { SectorsModule } from './sectors/sectors.module';
+import { IndustriesModule } from './industries/industries.module';
+import { CompanyProfilesModule } from './company-profiles/company-profiles.module';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const cookieSession = require('cookie-session');
 
@@ -41,19 +45,11 @@ const cookieSession = require('cookie-session');
         };
       },
     }),
-    // TypeOrmModule.forRoot({
-    //   type: 'postgres',
-    //   host: process.env.DB_HOST,
-    //   port: parseInt(process.env.DB_PORT),
-    //   username: process.env.DB_USERNAME,
-    //   password: process.env.DB_PASSWORD,
-    //   database: process.env.DB_DATABASE,
-    //   entities: [User, Position],
-    //   autoLoadEntities: true,
-    //   synchronize: true,
-    // }),
     UsersModule,
+    SectorsModule,
+    IndustriesModule,
     PositionsModule,
+    CompanyProfilesModule,
   ],
   controllers: [AppController],
   providers: [
