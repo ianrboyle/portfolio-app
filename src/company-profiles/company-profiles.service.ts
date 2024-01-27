@@ -17,11 +17,11 @@ export class CompanyProfilesService {
     };
     this.repo.create(companyProfile);
 
-    return this.repo.save(companyProfile);
+    return await this.repo.save(companyProfile);
   }
 
   async findBySymbol(symbol: string) {
-    const companyProfile = await this.repo.find({ where: { symbol } });
-    return companyProfile.length > 0 ? companyProfile[0] : null;
+    const companyProfiles = await this.repo.find({ where: { symbol } });
+    return companyProfiles.length > 0 ? companyProfiles[0] : null;
   }
 }
