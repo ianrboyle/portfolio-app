@@ -3,6 +3,8 @@ import { PositionsController } from './positions.controller';
 import { PositionsService } from './positions.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Position } from './position.entity';
+import { CompanyProfilesService } from '../company-profiles/company-profiles.service';
+import { CompanyProfile } from '../company-profiles/company-profile.entity';
 
 describe('PositionsController', () => {
   let controller: PositionsController;
@@ -13,6 +15,15 @@ describe('PositionsController', () => {
         PositionsService,
         {
           provide: getRepositoryToken(Position),
+          useValue: {
+            create: jest.fn(),
+            save: jest.fn(),
+            find: jest.fn(),
+          },
+        },
+        CompanyProfilesService,
+        {
+          provide: getRepositoryToken(CompanyProfile),
           useValue: {
             create: jest.fn(),
             save: jest.fn(),

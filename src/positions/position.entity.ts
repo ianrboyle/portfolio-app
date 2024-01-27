@@ -1,3 +1,4 @@
+import { CompanyProfile } from '../company-profiles/company-profile.entity';
 import { User } from '../users/user.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
@@ -9,16 +10,15 @@ export class Position {
   @Column()
   symbol: string;
 
-  @Column()
+  @Column('numeric', { precision: 10, scale: 3 })
   quantity: number;
 
-  @Column()
+  @Column('numeric', { precision: 10, scale: 3 })
   costPerShare: number;
 
   @ManyToOne(() => User, (user) => user.positions)
   user: User;
 
-  // @OneToOne(() => CompanyProfile, (companyProfile) => companyProfile.position)
-  // @JoinColumn()
-  // companyProfile: CompanyProfile;
+  @ManyToOne(() => CompanyProfile, (companyProfile) => companyProfile.positions)
+  companyProfile: CompanyProfile;
 }

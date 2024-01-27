@@ -1,66 +1,53 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Position } from './position.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreatePositionDto } from './dtos/create-position-dto';
-import { User } from 'src/users/user.entity';
-
-// import { CompanyProfilesService } from 'src/companyProfiles/company-profiles.service';
-// import { Sector } from 'src/sectors/sector.entity';
-// import { Industry } from 'src/industries/industries.entity';
+import { User } from '../users/user.entity';
+import { CompanyProfilesService } from '../company-profiles/company-profiles.service';
+import { updatePosition } from './position-helpers';
+import { UpdatePositionDto } from './dtos/update-position-dto';
 
 @Injectable()
 export class PositionsService {
-  constructor(@InjectRepository(Position) private repo: Repository<Position>) {}
+  constructor(
+    @InjectRepository(Position) private repo: Repository<Position>,
+    private companyProfilesService: CompanyProfilesService,
+  ) {}
 
-  create(positionDto: CreatePositionDto, user: User) {
+  async create(positionDto: CreatePositionDto, user: User) {
     const position = this.repo.create(positionDto);
     position.user = user;
 
-    const companyProfile = null;
-    // const companyProfile = this.companyProfilesService.findBySymbol(
-    //   position.symbol,
-    // );
-
+    let companyProfile = await this.companyProfilesService.findBySymbol(
+      position.symbol,
+    );
     if (!companyProfile) {
-      //create company profile
-      // position.companyProfile = this.mockCompanyProfile(positionDto);
+      companyProfile = await this.companyProfilesService.create(positionDto);
     }
+    position.companyProfile = companyProfile;
     return this.repo.save(position);
   }
 
-  // mockCompanyProfile(position: CreatePositionDto) {
-  //   const sector: Sector = {
-  //     id: 1,
-  //     sectorName: 'Tech',
-  //     companyProfile: new CompanyProfile(),
-  //     industries: [],
-  //   };
+  async getUserPositions(userId: number) {
+    return await this.repo.find({ where: { user: { id: userId } } });
+  }
 
-  //   const industry: Industry = {
-  //     id: 1,
-  //     industryName: 'Electronics',
-  //     sector: sector,
-  //     companyProfile: new CompanyProfile(),
-  //   };
-  //   sector.industries.push(industry);
+  findOne(id: number) {
+    if (!id) return null;
+    return this.repo.findOneBy({ id });
+  }
 
-  //   const companyProfile: CompanyProfile = {
-  //     id: 1,
-  //     symbol: position.symbol,
-  //     price: 13.12,
-  //     country: 'USA',
-  //     sector: null,
-  //     industry: null,
-  //     companyName: 'Apple',
-  //     // position: new Position(),
-  //   };
+  async update(id: number, updatePositionDto: UpdatePositionDto) {
+    const position = await this.findOne(id);
+    if (!position) {
+      throw new NotFoundException('position not found');
+    }
+    position.quantity = Number(position.quantity);
+    position.costPerShare = Number(position.costPerShare);
+    const updatedPosition = updatePosition(position, updatePositionDto);
 
-  //   sector.companyProfile = companyProfile;
-  //   industry.companyProfile = companyProfile;
-  //   companyProfile.sector = sector;
-  //   companyProfile.industry = industry;
-
-  //   return companyProfile;
-  // }
+    Object.assign(position, updatedPosition);
+    return this.repo.save(position);
+  }
 }
