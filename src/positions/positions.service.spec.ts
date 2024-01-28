@@ -45,6 +45,10 @@ describe('PositionsService', () => {
           price: 100,
           id: Math.floor(Math.random() * 99999),
           positions: [],
+          companyName: '',
+          industry: '',
+          sector: '',
+          country: '',
         };
         mockCompanyProfiles.push(companyProfile);
         return Promise.resolve(companyProfile);
