@@ -16,6 +16,11 @@ import {
   mockCompanyProfileDataOne,
   mockCompanyProfileDataTwo,
 } from '../mock-data/mock-company-profile-data';
+import { UpdatePositionDto } from './dtos/update-position-dto';
+import {
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 
 describe('PositionsService', () => {
   let service: PositionsService;
@@ -28,6 +33,7 @@ describe('PositionsService', () => {
       find: jest.fn(),
       findOneBy: jest.fn(),
       update: jest.fn(),
+      remove: jest.fn(),
     };
 
     const mockCompanyProfiles: CompanyProfile[] = [mockCompanyProfileDataOne];
@@ -137,18 +143,184 @@ describe('PositionsService', () => {
 
     expect(position).toEqual(null);
   });
-  it('should update a position', async () => {
-    mockRepository.findOneBy.mockReturnValue(null);
 
-    const position = service.findOne(mockPosition1.id);
+  it('should update a position with a positive update quantity', async () => {
+    const initialQuantity = 10;
+    const initialCostPerShare = 100;
+    const mockPosition = {
+      id: 1,
+      symbol: 'AAPL',
+      quantity: initialQuantity,
+      costPerShare: initialCostPerShare,
+      user: mockUserOne,
+      companyProfile: mockCompanyProfileDataOne,
+    };
 
-    expect(position).toEqual(null);
+    const updatePositionDto: UpdatePositionDto = {
+      updatedCostPerShare: 150,
+      updatedQuantity: 5,
+    };
+    const expectedQuantity =
+      mockPosition.quantity + updatePositionDto.updatedQuantity;
+    const expectedCostPerShare =
+      (mockPosition.costPerShare * mockPosition.quantity +
+        updatePositionDto.updatedCostPerShare *
+          updatePositionDto.updatedQuantity) /
+      expectedQuantity;
+    const updatedPosition = {
+      ...mockPosition,
+      quantity: expectedQuantity,
+      costPerShare: expectedCostPerShare,
+    };
+    mockRepository.findOneBy.mockResolvedValue(mockPosition);
+    mockRepository.save.mockResolvedValue(updatedPosition);
+    const result = await service.update(mockPosition.id, updatePositionDto);
+
+    // Ensure that the update method returns the expected result
+    expect(result).toEqual(updatedPosition);
+    expect(result.quantity).toBeGreaterThan(initialQuantity);
+    expect(result.costPerShare).toBeGreaterThan(initialCostPerShare);
+
+    expect(mockRepository.save).toHaveBeenCalledWith(mockPosition);
+    expect(mockRepository.findOneBy).toHaveBeenCalledWith({
+      id: mockPosition.id,
+    });
   });
-  it('should return a not found exception for findOne', async () => {
+  it('should update a position with a negative update quantity', async () => {
+    const initialQuantity = 10;
+    const initialCostPerShare = 100;
+    const mockPosition = {
+      id: 1,
+      symbol: 'AAPL',
+      quantity: initialQuantity,
+      costPerShare: initialCostPerShare,
+      user: mockUserOne,
+      companyProfile: mockCompanyProfileDataOne,
+    };
+
+    const updatePositionDto: UpdatePositionDto = {
+      updatedCostPerShare: 150,
+      updatedQuantity: -5,
+    };
+    const expectedQuantity =
+      mockPosition.quantity + updatePositionDto.updatedQuantity;
+
+    const updatedPosition = {
+      ...mockPosition,
+      quantity: expectedQuantity,
+    };
+    mockRepository.findOneBy.mockResolvedValue(mockPosition);
+    mockRepository.save.mockResolvedValue(updatedPosition);
+    const result = await service.update(mockPosition.id, updatePositionDto);
+
+    // Ensure that the update method returns the expected result
+    expect(result.quantity).toBeLessThan(initialQuantity);
+    expect(result).toEqual(updatedPosition);
+    expect(mockRepository.save).toHaveBeenCalledWith(mockPosition);
+    expect(mockRepository.findOneBy).toHaveBeenCalledWith({
+      id: mockPosition.id,
+    });
+  });
+
+  it('should throw InternalServerErrorException on save failure', async () => {
+    const initialQuantity = 10;
+    const initialCostPerShare = 100;
+    const mockPosition = {
+      id: 1,
+      symbol: 'AAPL',
+      quantity: initialQuantity,
+      costPerShare: initialCostPerShare,
+      user: mockUserOne,
+      companyProfile: mockCompanyProfileDataOne,
+    };
+
+    const updatePositionDto: UpdatePositionDto = {
+      updatedCostPerShare: 150,
+      updatedQuantity: 5,
+    };
+    const errorMessage = 'Simulated error during save';
+
+    const expectedQuantity =
+      mockPosition.quantity + updatePositionDto.updatedQuantity;
+    const expectedCostPerShare =
+      (mockPosition.costPerShare * mockPosition.quantity +
+        updatePositionDto.updatedCostPerShare *
+          updatePositionDto.updatedQuantity) /
+      expectedQuantity;
+    const updatedPosition = {
+      ...mockPosition,
+      quantity: expectedQuantity,
+      costPerShare: expectedCostPerShare,
+    };
+    mockRepository.findOneBy.mockReturnValue(updatedPosition);
+
+    mockRepository.save.mockRejectedValue(new Error(errorMessage));
+
+    await expect(
+      service.update(mockPosition.id, updatePositionDto),
+    ).rejects.toThrowError(InternalServerErrorException);
+    await expect(
+      service.update(mockPosition.id, updatePositionDto),
+    ).rejects.toThrowError(`Failed to update position, ID: ${mockPosition.id}`);
+  });
+
+  it('should throw NotFoundException on position not found', async () => {
+    const initialQuantity = 10;
+    const initialCostPerShare = 100;
+    const mockPosition = {
+      id: 1,
+      symbol: 'AAPL',
+      quantity: initialQuantity,
+      costPerShare: initialCostPerShare,
+      user: mockUserOne,
+      companyProfile: mockCompanyProfileDataOne,
+    };
+
+    const updatePositionDto: UpdatePositionDto = {
+      updatedCostPerShare: 150,
+      updatedQuantity: 5,
+    };
+
     mockRepository.findOneBy.mockReturnValue(null);
 
-    const position = service.findOne(mockPosition1.id);
+    await expect(
+      service.update(mockPosition.id, updatePositionDto),
+    ).rejects.toThrowError(NotFoundException);
+  });
 
-    expect(position).toEqual(null);
+  it('should remove a position', async () => {
+    const initialQuantity = 10;
+    const initialCostPerShare = 100;
+    const mockPosition = {
+      id: 1,
+      symbol: 'AAPL',
+      quantity: initialQuantity,
+      costPerShare: initialCostPerShare,
+      user: mockUserOne,
+      companyProfile: mockCompanyProfileDataOne,
+    };
+    mockRepository.findOneBy.mockReturnValue(mockPosition);
+    await service.remove(mockPosition.id);
+    expect(mockRepository.findOneBy).toHaveBeenCalledWith({
+      id: mockPosition.id,
+    });
+    expect(mockRepository.remove).toHaveBeenCalledWith(mockPosition);
+  });
+
+  it('remove should  a return a not found exception for no position ', async () => {
+    const initialQuantity = 10;
+    const initialCostPerShare = 100;
+    const mockPosition = {
+      id: 1,
+      symbol: 'AAPL',
+      quantity: initialQuantity,
+      costPerShare: initialCostPerShare,
+      user: mockUserOne,
+      companyProfile: mockCompanyProfileDataOne,
+    };
+    mockRepository.findOneBy.mockReturnValue(null);
+    await expect(service.remove(mockPosition.id)).rejects.toThrowError(
+      NotFoundException,
+    );
   });
 });

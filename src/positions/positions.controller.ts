@@ -27,6 +27,18 @@ export class PositionsController {
     const position = this.positionsService.create(body, user);
     return position;
   }
+
+  @Post('/insertmultiple')
+  @UseGuards(AuthGuard)
+  @Serialize(PositionDto)
+  createPositions(
+    @Body() body: CreatePositionDto[],
+    @CurrentUser() user: User,
+  ) {
+    const positions = this.positionsService.insertMultiple(body, user);
+    return positions;
+  }
+
   @Get()
   @UseGuards(AuthGuard)
   getUserPositions(@CurrentUser() user: User) {

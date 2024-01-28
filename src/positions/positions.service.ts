@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Position } from './position.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -29,6 +34,25 @@ export class PositionsService {
     return this.repo.save(position);
   }
 
+  async insertMultiple(positionDtos: CreatePositionDto[], user: User) {
+    const promises = positionDtos.map(async (p) => {
+      let companyProfile = await this.companyProfilesService.findBySymbol(
+        p.symbol,
+      );
+      if (!companyProfile) {
+        companyProfile = await this.companyProfilesService.create(p);
+      }
+      p.companyProfile = companyProfile;
+      p.user = user;
+      return p;
+    });
+
+    const modifiedPositionDtos = await Promise.all(promises);
+    const positions = this.repo.create(modifiedPositionDtos);
+    await this.repo.insert(positions);
+    return positions;
+  }
+
   async getUserPositions(userId: number) {
     return await this.repo.find({ where: { user: { id: userId } } });
   }
@@ -39,15 +63,44 @@ export class PositionsService {
   }
 
   async update(id: number, updatePositionDto: UpdatePositionDto) {
+    if (
+      isNaN(id) ||
+      !updatePositionDto ||
+      typeof updatePositionDto !== 'object'
+    ) {
+      throw new BadRequestException(
+        `Invalid input parameters: Id: ${id}, updatePositionDTO: ${updatePositionDto}`,
+      );
+    }
     const position = await this.findOne(id);
     if (!position) {
-      throw new NotFoundException('position not found');
+      throw new NotFoundException(`Position with ID: ${id} not found`);
     }
-    position.quantity = Number(position.quantity);
-    position.costPerShare = Number(position.costPerShare);
-    const updatedPosition = updatePosition(position, updatePositionDto);
+    position.quantity =
+      typeof position.quantity === 'number'
+        ? position.quantity
+        : Number(position.quantity);
+    position.costPerShare =
+      typeof position.costPerShare === 'number'
+        ? position.costPerShare
+        : Number(position.costPerShare);
 
+    const updatedPosition = updatePosition(position, updatePositionDto);
     Object.assign(position, updatedPosition);
-    return this.repo.save(position);
+    try {
+      return await this.repo.save(position);
+    } catch (error) {
+      throw new InternalServerErrorException(
+        `Failed to update position, ID: ${id}`,
+      );
+    }
+  }
+
+  async remove(id: number) {
+    const position = await this.findOne(id);
+    if (!position) {
+      throw new NotFoundException(`Position with ID: ${id} not found`);
+    }
+    return this.repo.remove(position);
   }
 }
