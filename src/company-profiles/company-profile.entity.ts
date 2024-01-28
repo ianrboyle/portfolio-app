@@ -9,8 +9,20 @@ export class CompanyProfile {
   @Column()
   symbol: string;
 
-  @Column()
+  @Column({ nullable: true })
+  companyName: string;
+
+  @Column('numeric', { precision: 10, scale: 3 })
   price: number;
+
+  @Column({ nullable: true })
+  industry: string;
+
+  @Column({ nullable: true })
+  sector: string;
+
+  @Column({ nullable: true })
+  country: string;
 
   @OneToMany(() => Position, (position) => position.companyProfile)
   positions: Position[];
