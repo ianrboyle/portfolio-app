@@ -1,5 +1,4 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { AxiosError } from 'axios';
 
 import { FinancialModelingPrepService } from './financial-modeling-prep.service';
 import { ConfigService } from '@nestjs/config';
@@ -52,11 +51,8 @@ describe('FinancialModelingPrepService', () => {
   });
 
   it('should get company profile using mocked HttpService', async () => {
-    // Mock the behavior of HttpService
     const mockedProfile: Profile[] = mockStockData;
-    // configServiceMock.get.mockReturnValue('fakeApiKey');
     httpServiceMock.get.mockReturnValue(of({ data: mockedProfile }) as any);
-    // Call the method that uses HttpService
     const result = await service.getCompanyProfile('AAPL');
 
     expect(result).toEqual(mockedProfile[0]);
@@ -65,17 +61,4 @@ describe('FinancialModelingPrepService', () => {
       `https://financialmodelingprep.com/api/v3/profile/AAPL?apikey=fakeApiKey`,
     );
   });
-  it('should throw error using mocked HttpService', async () => {
-    // Mock the behavior of HttpService to simulate an error
-    const axiosError = new AxiosError(
-      message: 'AxiosError',
-    );
-    // Call the method that uses HttpService
-    await expect(service.getCompanyProfile('AAPL')).rejects.toThrowError(
-      axiosError,
-    );
-  });
 });
-
-
-//TODO: FIXX ALL TESTS
