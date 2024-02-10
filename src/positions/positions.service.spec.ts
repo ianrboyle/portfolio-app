@@ -42,6 +42,7 @@ describe('PositionsService', () => {
         where: jest.fn().mockReturnThis(),
         getRawMany: jest.fn(),
       })),
+      insert: jest.fn(),
     };
 
     const mockCompanyProfiles: CompanyProfile[] = [mockCompanyProfileDataOne];
@@ -391,5 +392,38 @@ describe('PositionsService', () => {
     expect(companyProfile.symbol).toEqual(createCompanyProfileDto.symbol);
   });
 
-  it('should insert multiple positions', async () => {});
+  it('should insert multiple positions', async () => {
+    const positionDto: CreatePositionDto = {
+      symbol: 'AAPL',
+      quantity: 10,
+      costPerShare: 50,
+    };
+
+    const positionDtos: CreatePositionDto[] = [positionDto];
+    // Mock the behavior of findBySymbol and create methods
+    jest
+      .spyOn(fakeCompanyProfileServce, 'findBySymbol')
+      .mockResolvedValue(null);
+    jest
+      .spyOn(fakeCompanyProfileServce, 'create')
+      .mockResolvedValue(mockCompanyProfileDataOne);
+
+    // Mock the behavior of the repository methods
+    jest.spyOn(mockRepository, 'create').mockReturnValue(positionDtos);
+    jest.spyOn(mockRepository, 'insert').mockResolvedValue(undefined);
+
+    const result = await service.insertMultiple(positionDtos, mockUserOne);
+
+    // Assertions
+    expect(fakeCompanyProfileServce.findBySymbol).toHaveBeenCalledTimes(
+      positionDtos.length,
+    );
+    expect(fakeCompanyProfileServce.create).toHaveBeenCalledTimes(
+      positionDtos.length,
+    );
+    expect(mockRepository.create).toHaveBeenCalledWith(positionDtos);
+    expect(mockRepository.insert).toHaveBeenCalledWith(positionDtos);
+    expect(result).toEqual(positionDtos);
+    expect(result[0].companyProfile).toEqual(mockCompanyProfileDataOne);
+  });
 });
