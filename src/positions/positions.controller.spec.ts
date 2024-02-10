@@ -5,7 +5,11 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { Position } from './position.entity';
 import { CompanyProfilesService } from '../company-profiles/company-profiles.service';
 import { CompanyProfile } from '../company-profiles/company-profile.entity';
+import { FinancialModelingPrepService } from '../financialModelingPrep/financial-modeling-prep.service';
+import { ConfigService } from '@nestjs/config';
+import { HttpService } from '@nestjs/axios';
 
+jest.mock('@nestjs/axios');
 describe('PositionsController', () => {
   let controller: PositionsController;
 
@@ -22,6 +26,9 @@ describe('PositionsController', () => {
           },
         },
         CompanyProfilesService,
+        FinancialModelingPrepService,
+        ConfigService,
+        HttpService,
         {
           provide: getRepositoryToken(CompanyProfile),
           useValue: {

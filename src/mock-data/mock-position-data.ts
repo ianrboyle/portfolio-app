@@ -24,6 +24,14 @@ export const mockPosition2: Position = {
   user: mockUserTwo, // Assuming you have a mock user object
   companyProfile: mockCompanyProfileDataTwo, // Assuming you have a mock company profile object
 };
+export const mockPositionWithNoCompanyProfile: Position = {
+  id: 2,
+  symbol: 'GOOGL',
+  quantity: 25,
+  costPerShare: 200.5,
+  user: mockUserTwo, // Assuming you have a mock user object
+  companyProfile: null,
+};
 
 export const mockCreatePositionDtoOne: CreatePositionDto = {
   symbol: 'AAPL',

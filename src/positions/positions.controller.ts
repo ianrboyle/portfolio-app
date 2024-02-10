@@ -45,6 +45,14 @@ export class PositionsController {
     const userId = user.id;
     const userPositions = this.positionsService.getUserPositions(userId);
     return userPositions;
+    // const userPositions = await this.positionsService.getUserPositions(userId);
+
+    // // Use class-transformer to transform Position entities to PositionDto
+    // const positionDtos = userPositions.map((position) =>
+    //   PositionDto.fromEntity(position),
+    // );
+
+    // return positionDtos;
   }
 
   @Patch('/:id')

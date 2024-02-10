@@ -12,6 +12,7 @@ import { User } from '../users/user.entity';
 import { CompanyProfilesService } from '../company-profiles/company-profiles.service';
 import { updatePosition } from './position-helpers';
 import { UpdatePositionDto } from './dtos/update-position-dto';
+import { CreateCompanyProfileDto } from '../company-profiles/dtos/create-company-profile-dto';
 
 @Injectable()
 export class PositionsService {
@@ -54,12 +55,50 @@ export class PositionsService {
   }
 
   async getUserPositions(userId: number) {
-    return await this.repo.find({ where: { user: { id: userId } } });
+    const positions = await this.repo
+      .createQueryBuilder('position')
+      .select([
+        'position.id AS id',
+        'position.symbol AS symbol',
+        'position.quantity AS quantity',
+        'position.costPerShare AS costPerShare',
+        'user.id AS userId',
+        'companyProfile.id AS companyProfileId',
+      ])
+      .innerJoin('position.user', 'user')
+      .innerJoin('position.companyProfile', 'companyProfile')
+      .where('user.id = :userId', { userId })
+      .getRawMany();
+
+    return positions;
   }
+
+  // return await this.repo.find({
+  //   where: { user: { id: userId } },
+  //   relations: ['companyProfile'],
+  // });
 
   findOne(id: number) {
     if (!id) return null;
     return this.repo.findOneBy({ id });
+  }
+
+  async updatePositionCompanyProfile(
+    position: Position,
+    createCompanyProfileDto: CreateCompanyProfileDto,
+  ) {
+    const companyProfile =
+      await this.companyProfilesService.createCustomCompanyProfile(
+        createCompanyProfileDto,
+      );
+    position.companyProfile = companyProfile;
+    try {
+      return await this.repo.save(position);
+    } catch (error) {
+      throw new InternalServerErrorException(
+        `Failed to update position, ID: ${position.id}`,
+      );
+    }
   }
 
   async update(id: number, updatePositionDto: UpdatePositionDto) {

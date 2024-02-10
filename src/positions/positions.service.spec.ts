@@ -10,6 +10,7 @@ import {
   mockCreatePositionDtoTwo,
   mockPosition1,
   mockPosition2,
+  mockPositionWithNoCompanyProfile,
 } from '../mock-data/mock-position-data';
 import { mockUserOne, mockUserTwo } from '../mock-data/mock-user-data';
 import {
@@ -21,6 +22,7 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
+import { CreateCompanyProfileDto } from '../company-profiles/dtos/create-company-profile-dto';
 
 describe('PositionsService', () => {
   let service: PositionsService;
@@ -34,6 +36,12 @@ describe('PositionsService', () => {
       findOneBy: jest.fn(),
       update: jest.fn(),
       remove: jest.fn(),
+      createQueryBuilder: jest.fn(() => ({
+        select: jest.fn().mockReturnThis(),
+        innerJoin: jest.fn().mockReturnThis(),
+        where: jest.fn().mockReturnThis(),
+        getRawMany: jest.fn(),
+      })),
     };
 
     const mockCompanyProfiles: CompanyProfile[] = [mockCompanyProfileDataOne];
@@ -60,6 +68,22 @@ describe('PositionsService', () => {
         const returnedProfile =
           filteredProfiles.length > 0 ? filteredProfiles[0] : null;
         return Promise.resolve(returnedProfile);
+      },
+      createCustomCompanyProfile: (
+        createCompanyProfileDto: CreateCompanyProfileDto,
+      ) => {
+        const companyProfile: CompanyProfile = {
+          symbol: createCompanyProfileDto.symbol,
+          price: createCompanyProfileDto.price,
+          id: Math.floor(Math.random() * 99999),
+          positions: [],
+          companyName: createCompanyProfileDto.companyName,
+          industry: createCompanyProfileDto.industry,
+          sector: createCompanyProfileDto.sector,
+          country: createCompanyProfileDto.country,
+        };
+
+        return Promise.resolve(companyProfile);
       },
     };
     const module: TestingModule = await Test.createTestingModule({
@@ -125,7 +149,12 @@ describe('PositionsService', () => {
 
   it('should return a users positions', async () => {
     mockUserOne.positions.push(mockPosition1);
-    mockRepository.find.mockReturnValue(mockUserOne.positions);
+    mockRepository.createQueryBuilder.mockReturnValue({
+      select: jest.fn().mockReturnThis(),
+      innerJoin: jest.fn().mockReturnThis(),
+      where: jest.fn().mockReturnThis(),
+      getRawMany: jest.fn().mockReturnValue(mockUserOne.positions),
+    });
 
     const positions = await service.getUserPositions(mockUserOne.id);
 
@@ -327,4 +356,40 @@ describe('PositionsService', () => {
       NotFoundException,
     );
   });
+
+  it('should create a custom company profile for a position', async () => {
+    const createCompanyProfileDto: CreateCompanyProfileDto = {
+      symbol: 'custom',
+      industry: 'industry',
+      sector: 'sector',
+      companyName: 'custom',
+      price: 10,
+      country: 'country',
+    };
+    const positionWithCustomProfile = {
+      ...mockPositionWithNoCompanyProfile,
+      companyProfile: {
+        symbol: createCompanyProfileDto.symbol,
+        industry: createCompanyProfileDto.industry,
+        sector: createCompanyProfileDto.sector,
+        price: createCompanyProfileDto.price,
+        companyName: createCompanyProfileDto.companyName,
+        country: createCompanyProfileDto.country,
+        // Add other properties as needed
+      },
+    };
+    mockRepository.save.mockReturnValue(positionWithCustomProfile);
+
+    const updatedPosition = await service.updatePositionCompanyProfile(
+      mockPositionWithNoCompanyProfile,
+      createCompanyProfileDto,
+    );
+
+    const companyProfile = updatedPosition.companyProfile;
+
+    expect(updatedPosition.companyProfile).toBeDefined;
+    expect(companyProfile.symbol).toEqual(createCompanyProfileDto.symbol);
+  });
+
+  it('should insert multiple positions', async () => {});
 });
