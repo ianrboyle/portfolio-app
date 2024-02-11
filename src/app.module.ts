@@ -7,11 +7,13 @@ import { UsersModule } from './users/users.module';
 import { PositionsModule } from './positions/positions.module';
 import { User } from './users/user.entity';
 import { Position } from './positions/position.entity';
-import { APP_PIPE } from '@nestjs/core';
+import { APP_FILTER, APP_PIPE } from '@nestjs/core';
 
 import { SectorsModule } from './sectors/sectors.module';
 import { IndustriesModule } from './industries/industries.module';
 import { CompanyProfilesModule } from './company-profiles/company-profiles.module';
+import { LoggerModule } from './logger/logger.module';
+import { HttpExceptionFilter } from './logger/HttpException.filter';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const cookieSession = require('cookie-session');
 
@@ -50,6 +52,7 @@ const cookieSession = require('cookie-session');
     IndustriesModule,
     PositionsModule,
     CompanyProfilesModule,
+    LoggerModule,
   ],
   controllers: [AppController],
   providers: [
@@ -59,6 +62,10 @@ const cookieSession = require('cookie-session');
       useValue: new ValidationPipe({
         whitelist: true,
       }),
+    },
+    {
+      provide: APP_FILTER, //you have to use this custom provider
+      useClass: HttpExceptionFilter, //this is your custom exception filter
     },
   ],
 })

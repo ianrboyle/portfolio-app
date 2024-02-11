@@ -6,9 +6,10 @@ import { User } from './user.entity';
 import { UsersService } from './users.service';
 import { AuthService } from './auth.service';
 import { CurrentUserInterceptor } from './interceptors/current-user.interceptor';
+import { LoggerModule } from '../logger/logger.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User])],
+  imports: [TypeOrmModule.forFeature([User]), LoggerModule],
   controllers: [UsersController],
   providers: [
     UsersService,

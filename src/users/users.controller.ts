@@ -10,6 +10,7 @@ import {
   NotFoundException,
   Session,
   UseGuards,
+  UseFilters,
 } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user-dto';
 import { UsersService } from './users.service';
@@ -20,8 +21,10 @@ import { AuthService } from './auth.service';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { User } from './user.entity';
 import { AuthGuard } from '../guards/auth.guard';
+import { HttpExceptionFilter } from '../logger/HttpException.filter';
 @Controller('auth')
 @Serialize(UserDto)
+@UseFilters(HttpExceptionFilter)
 
 //consider exception filter
 export class UsersController {
