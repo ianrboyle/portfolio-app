@@ -4,9 +4,8 @@ import { PositionsService } from './positions.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Position } from './position.entity';
 import { CompanyProfile } from '../company-profiles/company-profile.entity';
-import { CompanyProfilesService } from '../company-profiles/company-profiles.service';
-import { FinancialModelingPrepService } from '../financialModelingPrep/financial-modeling-prep.service';
 import { HttpModule } from '@nestjs/axios';
+import { CompanyProfilesModule } from '../company-profiles/company-profiles.module';
 
 @Module({
   imports: [
@@ -17,12 +16,9 @@ import { HttpModule } from '@nestjs/axios';
         maxRedirects: 5,
       }),
     }),
+    CompanyProfilesModule,
   ],
   controllers: [PositionsController],
-  providers: [
-    PositionsService,
-    CompanyProfilesService,
-    FinancialModelingPrepService,
-  ],
+  providers: [PositionsService],
 })
 export class PositionsModule {}

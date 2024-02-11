@@ -16,5 +16,6 @@ import { FinancialModelingPrepService } from '../financialModelingPrep/financial
     }),
   ],
   providers: [CompanyProfilesService, FinancialModelingPrepService],
+  exports: [CompanyProfilesService],
 })
 export class CompanyProfilesModule {}
