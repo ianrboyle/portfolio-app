@@ -4,11 +4,13 @@ import { UsersService } from './users.service';
 import { AuthService } from './auth.service';
 import { User } from './user.entity';
 import { NotFoundException } from '@nestjs/common';
+import { LoggerService } from '../logger/logger.service';
 
 describe('UsersController', () => {
   let controller: UsersController;
   let fakeUsersService: Partial<UsersService>;
   let fakeAuthService: Partial<AuthService>;
+  let fakeLoggerService: Partial<LoggerService>;
   beforeEach(async () => {
     const users: User[] = [];
     fakeAuthService = {
@@ -63,6 +65,7 @@ describe('UsersController', () => {
       providers: [
         { provide: UsersService, useValue: fakeUsersService },
         { provide: AuthService, useValue: fakeAuthService },
+        { provide: LoggerService, useValue: fakeLoggerService },
       ],
       controllers: [UsersController],
     }).compile();
@@ -97,7 +100,9 @@ describe('UsersController', () => {
   });
 
   it('findUserById throws an error if user with given id is not found', async () => {
-    fakeUsersService.findOne = () => null;
+    fakeUsersService.findOne = () => {
+      throw new NotFoundException('User Not Found');
+    };
     await expect(controller.findUserById('1')).rejects.toThrow(
       NotFoundException,
     );

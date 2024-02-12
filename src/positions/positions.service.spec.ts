@@ -23,11 +23,13 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { CreateCompanyProfileDto } from '../company-profiles/dtos/create-company-profile-dto';
+import { LoggerService } from '../logger/logger.service';
 
 describe('PositionsService', () => {
   let service: PositionsService;
   let mockRepository: Record<string, jest.Mock>;
   let fakeCompanyProfileServce: Partial<CompanyProfilesService>;
+  let fakeLoggerService: Partial<LoggerService>;
   beforeEach(async () => {
     mockRepository = {
       create: jest.fn(),
@@ -36,12 +38,6 @@ describe('PositionsService', () => {
       findOneBy: jest.fn(),
       update: jest.fn(),
       remove: jest.fn(),
-      createQueryBuilder: jest.fn(() => ({
-        select: jest.fn().mockReturnThis(),
-        innerJoin: jest.fn().mockReturnThis(),
-        where: jest.fn().mockReturnThis(),
-        getRawMany: jest.fn(),
-      })),
       insert: jest.fn(),
     };
 
@@ -98,6 +94,10 @@ describe('PositionsService', () => {
           provide: CompanyProfilesService,
           useValue: fakeCompanyProfileServce,
         },
+        {
+          provide: LoggerService,
+          useValue: fakeLoggerService,
+        },
       ],
     }).compile();
 
@@ -149,33 +149,55 @@ describe('PositionsService', () => {
   });
 
   it('should return a users positions', async () => {
-    mockUserOne.positions.push(mockPosition1);
-    mockRepository.createQueryBuilder.mockReturnValue({
-      select: jest.fn().mockReturnThis(),
-      innerJoin: jest.fn().mockReturnThis(),
-      where: jest.fn().mockReturnThis(),
-      getRawMany: jest.fn().mockReturnValue(mockUserOne.positions),
-    });
+    const user = mockUserOne;
+    const position = mockPosition1;
+    user.positions = [];
+    user.positions.push(position);
 
-    const positions = await service.getUserPositions(mockUserOne.id);
+    mockRepository.find.mockReturnValue(user.positions);
 
-    expect(positions).toContain(mockPosition1);
+    const positions = await service.getUserPositions(user.id);
+
+    expect(positions).toContain(position);
   });
 
   it('should return a position by id', async () => {
-    mockRepository.findOneBy.mockReturnValue(mockPosition1);
+    const mockPosition: Position = {
+      id: 1,
+      symbol: 'AAPL',
+      quantity: 100,
+      costPerShare: 30,
+      user: {
+        id: 1,
+        email: '',
+        password: '',
+        positions: [],
+        logInsert: function (): void {
+          throw new Error('Function not implemented.');
+        },
+        logRemove: function (): void {
+          throw new Error('Function not implemented.');
+        },
+        logUpdate: function (): void {
+          throw new Error('Function not implemented.');
+        },
+      },
 
-    const position = service.findOne(mockPosition1.id);
+      companyProfile: new CompanyProfile(),
+    };
+    mockRepository.find.mockReturnValue([mockPosition]);
 
-    expect(position).toEqual(mockPosition1);
+    const position = await service.findOne(mockPosition.id);
+
+    expect(position).toEqual(mockPosition);
   });
 
   it('should return a not found exception for findOne', async () => {
-    mockRepository.findOneBy.mockReturnValue(null);
-
-    const position = service.findOne(mockPosition1.id);
-
-    expect(position).toEqual(null);
+    mockRepository.find.mockReturnValue([]);
+    const exception = new NotFoundException(
+      `Position With ID: ${mockPosition1.id} Not Found`,
+    );
+    await expect(service.findOne(mockPosition1.id)).rejects.toThrow(exception);
   });
 
   it('should update a position with a positive update quantity', async () => {
@@ -206,7 +228,7 @@ describe('PositionsService', () => {
       quantity: expectedQuantity,
       costPerShare: expectedCostPerShare,
     };
-    mockRepository.findOneBy.mockResolvedValue(mockPosition);
+    mockRepository.find.mockResolvedValue([mockPosition]);
     mockRepository.save.mockResolvedValue(updatedPosition);
     const result = await service.update(mockPosition.id, updatePositionDto);
 
@@ -216,8 +238,11 @@ describe('PositionsService', () => {
     expect(result.costPerShare).toBeGreaterThan(initialCostPerShare);
 
     expect(mockRepository.save).toHaveBeenCalledWith(mockPosition);
-    expect(mockRepository.findOneBy).toHaveBeenCalledWith({
-      id: mockPosition.id,
+    expect(mockRepository.find).toHaveBeenCalledWith({
+      relations: ['user', 'companyProfile'],
+      where: {
+        id: 1,
+      },
     });
   });
   it('should update a position with a negative update quantity', async () => {
@@ -243,7 +268,7 @@ describe('PositionsService', () => {
       ...mockPosition,
       quantity: expectedQuantity,
     };
-    mockRepository.findOneBy.mockResolvedValue(mockPosition);
+    mockRepository.find.mockResolvedValue([mockPosition]);
     mockRepository.save.mockResolvedValue(updatedPosition);
     const result = await service.update(mockPosition.id, updatePositionDto);
 
@@ -251,8 +276,11 @@ describe('PositionsService', () => {
     expect(result.quantity).toBeLessThan(initialQuantity);
     expect(result).toEqual(updatedPosition);
     expect(mockRepository.save).toHaveBeenCalledWith(mockPosition);
-    expect(mockRepository.findOneBy).toHaveBeenCalledWith({
-      id: mockPosition.id,
+    expect(mockRepository.find).toHaveBeenCalledWith({
+      relations: ['user', 'companyProfile'],
+      where: {
+        id: 1,
+      },
     });
   });
 
@@ -286,13 +314,13 @@ describe('PositionsService', () => {
       quantity: expectedQuantity,
       costPerShare: expectedCostPerShare,
     };
-    mockRepository.findOneBy.mockReturnValue(updatedPosition);
+    mockRepository.find.mockReturnValue([updatedPosition]);
 
     mockRepository.save.mockRejectedValue(new Error(errorMessage));
 
     await expect(
       service.update(mockPosition.id, updatePositionDto),
-    ).rejects.toThrowError(InternalServerErrorException);
+    ).rejects.toThrow(InternalServerErrorException);
     await expect(
       service.update(mockPosition.id, updatePositionDto),
     ).rejects.toThrowError(`Failed to update position, ID: ${mockPosition.id}`);
@@ -315,11 +343,11 @@ describe('PositionsService', () => {
       updatedQuantity: 5,
     };
 
-    mockRepository.findOneBy.mockReturnValue(null);
+    mockRepository.find.mockReturnValue([]);
 
     await expect(
       service.update(mockPosition.id, updatePositionDto),
-    ).rejects.toThrowError(NotFoundException);
+    ).rejects.toThrow(NotFoundException);
   });
 
   it('should remove a position', async () => {
@@ -333,15 +361,18 @@ describe('PositionsService', () => {
       user: mockUserOne,
       companyProfile: mockCompanyProfileDataOne,
     };
-    mockRepository.findOneBy.mockReturnValue(mockPosition);
+    mockRepository.find.mockReturnValue([mockPosition]);
     await service.remove(mockPosition.id);
-    expect(mockRepository.findOneBy).toHaveBeenCalledWith({
-      id: mockPosition.id,
+    expect(mockRepository.find).toHaveBeenCalledWith({
+      relations: ['user', 'companyProfile'],
+      where: {
+        id: mockPosition.id,
+      },
     });
     expect(mockRepository.remove).toHaveBeenCalledWith(mockPosition);
   });
 
-  it('remove should  a return a not found exception for no position ', async () => {
+  it('remove should a return a not found exception for no position ', async () => {
     const initialQuantity = 10;
     const initialCostPerShare = 100;
     const mockPosition = {
@@ -352,8 +383,12 @@ describe('PositionsService', () => {
       user: mockUserOne,
       companyProfile: mockCompanyProfileDataOne,
     };
-    mockRepository.findOneBy.mockReturnValue(null);
-    await expect(service.remove(mockPosition.id)).rejects.toThrowError(
+    mockRepository.find.mockReturnValue([]);
+
+    // await expect(service.remove(mockPosition.id)).rejects.toThrowError(
+    //   NotFoundException,
+    // );
+    await expect(service.remove(mockPosition.id)).rejects.toThrow(
       NotFoundException,
     );
   });

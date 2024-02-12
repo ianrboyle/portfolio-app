@@ -55,22 +55,10 @@ export class PositionsService {
   }
 
   async getUserPositions(userId: number) {
-    const positions = await this.repo
-      .createQueryBuilder('position')
-      .select([
-        'position.id AS id',
-        'position.symbol AS symbol',
-        'position.quantity AS quantity',
-        'position.costPerShare AS costPerShare',
-        'user.id AS userId',
-        'companyProfile.id AS companyProfileId',
-      ])
-      .innerJoin('position.user', 'user')
-      .innerJoin('position.companyProfile', 'companyProfile')
-      .where('user.id = :userId', { userId })
-      .getRawMany();
-
-    return positions;
+    return await this.repo.find({
+      where: { user: { id: userId } },
+      relations: ['companyProfile', 'user'],
+    });
   }
 
   // return await this.repo.find({
@@ -78,9 +66,17 @@ export class PositionsService {
   //   relations: ['companyProfile'],
   // });
 
-  findOne(id: number) {
-    if (!id) return null;
-    return this.repo.findOneBy({ id });
+  async findOne(id: number) {
+    if (!id) throw new BadRequestException('Invalid Position Id');
+    const positions = await this.repo.find({
+      where: { id },
+      relations: ['user', 'companyProfile'],
+    });
+
+    if (!positions || positions.length <= 0)
+      throw new NotFoundException(`Position With ID: ${id} Not Found`);
+
+    return positions[0];
   }
 
   async updatePositionCompanyProfile(
@@ -112,9 +108,7 @@ export class PositionsService {
       );
     }
     const position = await this.findOne(id);
-    if (!position) {
-      throw new NotFoundException(`Position with ID: ${id} not found`);
-    }
+
     position.quantity =
       typeof position.quantity === 'number'
         ? position.quantity
@@ -137,9 +131,6 @@ export class PositionsService {
 
   async remove(id: number) {
     const position = await this.findOne(id);
-    if (!position) {
-      throw new NotFoundException(`Position with ID: ${id} not found`);
-    }
     return this.repo.remove(position);
   }
 }

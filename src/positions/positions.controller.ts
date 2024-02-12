@@ -5,6 +5,7 @@ import {
   Param,
   Patch,
   Post,
+  UseFilters,
   UseGuards,
 } from '@nestjs/common';
 import { CreatePositionDto } from './dtos/create-position-dto';
@@ -15,14 +16,16 @@ import { User } from '../users/user.entity';
 import { Serialize } from '../interceptors/serialize-interceptor';
 import { PositionDto } from './dtos/position-dto';
 import { UpdatePositionDto } from './dtos/update-position-dto';
+import { HttpExceptionFilter } from '../logger/HttpException.filter';
 
 @Controller('positions')
+@Serialize(PositionDto)
+@UseFilters(HttpExceptionFilter)
 export class PositionsController {
   constructor(private positionsService: PositionsService) {}
 
   @Post()
   @UseGuards(AuthGuard)
-  @Serialize(PositionDto)
   createPosition(@Body() body: CreatePositionDto, @CurrentUser() user: User) {
     const position = this.positionsService.create(body, user);
     return position;
@@ -30,7 +33,6 @@ export class PositionsController {
 
   @Post('/insertmultiple')
   @UseGuards(AuthGuard)
-  @Serialize(PositionDto)
   createPositions(
     @Body() body: CreatePositionDto[],
     @CurrentUser() user: User,
@@ -41,18 +43,15 @@ export class PositionsController {
 
   @Get()
   @UseGuards(AuthGuard)
-  getUserPositions(@CurrentUser() user: User) {
+  async getUserPositions(@CurrentUser() user: User) {
     const userId = user.id;
-    const userPositions = this.positionsService.getUserPositions(userId);
+    const userPositions = await this.positionsService.getUserPositions(userId);
     return userPositions;
-    // const userPositions = await this.positionsService.getUserPositions(userId);
-
-    // // Use class-transformer to transform Position entities to PositionDto
-    // const positionDtos = userPositions.map((position) =>
-    //   PositionDto.fromEntity(position),
-    // );
-
-    // return positionDtos;
+  }
+  @Get('/:id')
+  @UseGuards(AuthGuard)
+  async getPositionById(@Param('id') id: string) {
+    return await this.positionsService.findOne(parseInt(id));
   }
 
   @Patch('/:id')

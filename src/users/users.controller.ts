@@ -7,7 +7,6 @@ import {
   Patch,
   Param,
   Delete,
-  NotFoundException,
   Session,
   UseGuards,
   UseFilters,
@@ -51,17 +50,12 @@ export class UsersController {
   @UseGuards(AuthGuard)
   @Get('/currentuser')
   getCurrentUser(@CurrentUser() currentUser: User) {
-    // return this.usersService.findOne(session.userId);
     return currentUser;
   }
 
   @Get('/:id')
   async findUserById(@Param('id') id: string) {
-    const user = await this.usersService.findOne(parseInt(id));
-    if (!user) {
-      throw new NotFoundException('user not found');
-    }
-    return user;
+    return await this.usersService.findOne(parseInt(id));
   }
   @Get()
   findUserByEmail(@Query('email') email: string) {
