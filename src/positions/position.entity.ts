@@ -1,4 +1,6 @@
 import { CompanyProfile } from '../company-profiles/company-profile.entity';
+import { Industry } from '../industries/industries.entity';
+import { Sector } from '../sectors/sector.entity';
 import { User } from '../users/user.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
@@ -18,6 +20,12 @@ export class Position {
 
   @ManyToOne(() => User, (user) => user.positions)
   user: User;
+
+  @ManyToOne(() => Sector, (sector) => sector.positions)
+  sector: Sector;
+
+  @ManyToOne(() => Industry, (industry) => industry.positions)
+  industry: Industry;
 
   @ManyToOne(() => CompanyProfile, (companyProfile) => companyProfile.positions)
   companyProfile: CompanyProfile;

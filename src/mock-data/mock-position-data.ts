@@ -14,6 +14,8 @@ export const mockPosition1: Position = {
   costPerShare: 100,
   user: mockUserOne,
   companyProfile: mockCompanyProfileDataOne,
+  sector: null,
+  industry: null,
 };
 
 export const mockPosition2: Position = {
@@ -22,7 +24,9 @@ export const mockPosition2: Position = {
   quantity: 25,
   costPerShare: 200.5,
   user: mockUserTwo, // Assuming you have a mock user object
-  companyProfile: mockCompanyProfileDataTwo, // Assuming you have a mock company profile object
+  companyProfile: mockCompanyProfileDataTwo,
+  sector: null,
+  industry: null,
 };
 export const mockPositionWithNoCompanyProfile: Position = {
   id: 2,
@@ -31,6 +35,8 @@ export const mockPositionWithNoCompanyProfile: Position = {
   costPerShare: 200.5,
   user: mockUserTwo, // Assuming you have a mock user object
   companyProfile: null,
+  sector: null,
+  industry: null,
 };
 
 export const mockCreatePositionDtoOne: CreatePositionDto = {
