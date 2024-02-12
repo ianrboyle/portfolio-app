@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CompanyProfile } from './company-profile.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -37,45 +37,64 @@ export class CompanyProfilesService {
       sector: profile?.sector,
       country: profile?.country,
     };
-    this.repo.create(companyProfile);
+    try {
+      this.repo.create(companyProfile);
 
-    return await this.repo.save(companyProfile);
+      return await this.repo.save(companyProfile);
+    } catch (error) {
+      throw new InternalServerErrorException(
+        `Failed to create company profile for position: ${positionDto}`,
+      );
+    }
   }
 
   async findBySymbol(symbol: string) {
     const companyProfiles = await this.repo.find({ where: { symbol } });
-    return companyProfiles && companyProfiles.length > 0
-      ? companyProfiles[0]
-      : null;
+    if (companyProfiles && companyProfiles.length > 0)
+      return companyProfiles[0];
+    return null;
   }
 
   createCustomCompanyProfile = async (
     createCompanyProfileDto: CreateCompanyProfileDto,
   ) => {
-    const companyProfile: Partial<CompanyProfile> = {
-      symbol: createCompanyProfileDto.symbol,
-      companyName: createCompanyProfileDto.companyName,
-      price: createCompanyProfileDto?.price || 0,
-      industry: createCompanyProfileDto.industry,
-      sector: createCompanyProfileDto.sector,
-      country: createCompanyProfileDto?.country,
-    };
-    this.repo.create(companyProfile);
+    try {
+      const companyProfile: Partial<CompanyProfile> = {
+        symbol: createCompanyProfileDto.symbol,
+        companyName: createCompanyProfileDto.companyName,
+        price: createCompanyProfileDto?.price || 0,
+        industry: createCompanyProfileDto.industry,
+        sector: createCompanyProfileDto.sector,
+        country: createCompanyProfileDto?.country,
+      };
+      this.repo.create(companyProfile);
 
-    return await this.repo.save(companyProfile);
+      return await this.repo.save(companyProfile);
+    } catch (error) {
+      throw new InternalServerErrorException(
+        `Failed to create custom company profile: ${createCompanyProfileDto}`,
+      );
+    }
   };
 
   getDefaultProfile = async () => {
     // this should always return a default profile except on the first run
-    const defaultProfile = await this.findBySymbol('default');
-    if (!defaultProfile) {
-      const newDefaultProfile = this.repo.create({
-        symbol: 'default',
-        companyName: 'custom profile required',
-        price: 0,
-      });
-      return await this.repo.save(newDefaultProfile);
+    try {
+      const defaultProfile = await this.findBySymbol('default');
+
+      if (!defaultProfile) {
+        const newDefaultProfile = this.repo.create({
+          symbol: 'default',
+          companyName: 'custom profile required',
+          price: 0,
+        });
+        return await this.repo.save(newDefaultProfile);
+      }
+      return defaultProfile;
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Failed to create default company profile',
+      );
     }
-    return defaultProfile;
   };
 }

@@ -22,17 +22,25 @@ export class PositionsService {
   ) {}
 
   async create(positionDto: CreatePositionDto, user: User) {
-    const position = this.repo.create(positionDto);
-    position.user = user;
+    positionDto.user = user;
 
     let companyProfile = await this.companyProfilesService.findBySymbol(
-      position.symbol,
+      positionDto.symbol,
     );
     if (!companyProfile) {
       companyProfile = await this.companyProfilesService.create(positionDto);
     }
-    position.companyProfile = companyProfile;
-    return this.repo.save(position);
+    positionDto.companyProfile = companyProfile;
+    try {
+      const position = this.repo.create(positionDto);
+      return this.repo.save(position);
+    } catch (error) {
+      throw new InternalServerErrorException(
+        `Failed to create position for UserId: ${
+          user.id
+        }, positionDto: ${JSON.stringify(positionDto)}`,
+      );
+    }
   }
 
   async insertMultiple(positionDtos: CreatePositionDto[], user: User) {
