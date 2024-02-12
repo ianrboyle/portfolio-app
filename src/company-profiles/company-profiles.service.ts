@@ -15,12 +15,13 @@ export class CompanyProfilesService {
   ) {}
 
   async create(positionDto: CreatePositionDto) {
-    //assume the company profile doesn't exist?
-    // find one with fmp
+    //assume the company profile doesn't exist - yes, because we will check if it exists prior to creating
+    // find one with fmps
     const profile = await this.financialPrepModelingService.getCompanyProfile(
       positionDto.symbol,
     );
-    // if fmp doesn't have one, we need to provide a custom one where user or maybe admin will create later
+    // if fmps doesn't have one, we need to provide a custom one where user or maybe admin will create later
+    // or user creates, and we add custom flag to companyProfile, and user can choose if they want ones that have been created or opt for a new one
     //so for now we'll provide a default
 
     // but if user is going to create it, company profile can't be global/ belong to everyone.
@@ -39,7 +40,6 @@ export class CompanyProfilesService {
     };
     try {
       this.repo.create(companyProfile);
-
       return await this.repo.save(companyProfile);
     } catch (error) {
       throw new InternalServerErrorException(
@@ -66,6 +66,7 @@ export class CompanyProfilesService {
         industry: createCompanyProfileDto.industry,
         sector: createCompanyProfileDto.sector,
         country: createCompanyProfileDto?.country,
+        isCustomProfile: true,
       };
       this.repo.create(companyProfile);
 

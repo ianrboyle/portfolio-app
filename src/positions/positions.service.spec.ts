@@ -54,6 +54,7 @@ describe('PositionsService', () => {
           industry: '',
           sector: '',
           country: '',
+          isCustomProfile: false,
         };
         mockCompanyProfiles.push(companyProfile);
         return Promise.resolve(companyProfile);
@@ -78,6 +79,7 @@ describe('PositionsService', () => {
           industry: createCompanyProfileDto.industry,
           sector: createCompanyProfileDto.sector,
           country: createCompanyProfileDto.country,
+          isCustomProfile: true,
         };
 
         return Promise.resolve(companyProfile);
@@ -401,6 +403,7 @@ describe('PositionsService', () => {
       companyName: 'custom',
       price: 10,
       country: 'country',
+      isCustomProfile: true,
     };
     const positionWithCustomProfile = {
       ...mockPositionWithNoCompanyProfile,
@@ -411,6 +414,7 @@ describe('PositionsService', () => {
         price: createCompanyProfileDto.price,
         companyName: createCompanyProfileDto.companyName,
         country: createCompanyProfileDto.country,
+        isCustomProfile: createCompanyProfileDto.isCustomProfile,
         // Add other properties as needed
       },
     };

@@ -1,5 +1,9 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable, Logger } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  ServiceUnavailableException,
+} from '@nestjs/common';
 import { AxiosError } from 'axios';
 import { catchError, firstValueFrom } from 'rxjs';
 import { Profile } from './models/profile';
@@ -28,7 +32,11 @@ export class FinancialModelingPrepService {
         .pipe(
           catchError((error: AxiosError) => {
             this.logger.error(error.response.data);
-            throw `Error fetching company profile from FinancialModelingPrep for symbol: ${symbol}`;
+            throw new ServiceUnavailableException(
+              `Error fetching company profile from FinancialModelingPrep for symbol: ${symbol}. Error Response: ${JSON.stringify(
+                error.response.data,
+              )}`,
+            );
           }),
         ),
     );

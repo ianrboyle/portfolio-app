@@ -24,6 +24,9 @@ export class CompanyProfile {
   @Column({ nullable: true })
   country: string;
 
+  @Column({ type: 'boolean', default: false })
+  isCustomProfile: boolean;
+
   @OneToMany(() => Position, (position) => position.companyProfile)
   positions: Position[];
 }

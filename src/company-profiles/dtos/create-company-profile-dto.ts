@@ -1,4 +1,4 @@
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateCompanyProfileDto {
   @IsString()
@@ -20,4 +20,7 @@ export class CreateCompanyProfileDto {
   @IsString()
   @IsOptional()
   country: string;
+
+  @IsBoolean()
+  isCustomProfile: boolean = false;
 }

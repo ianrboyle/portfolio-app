@@ -118,6 +118,7 @@ describe('CompanyProfilesService', () => {
       companyName: 'custom',
       price: 10,
       country: 'country',
+      isCustomProfile: false,
     };
     mockRepository.create.mockReturnValue({
       symbol: 'custom',

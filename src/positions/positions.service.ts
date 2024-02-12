@@ -36,9 +36,7 @@ export class PositionsService {
       return this.repo.save(position);
     } catch (error) {
       throw new InternalServerErrorException(
-        `Failed to create position for UserId: ${
-          user.id
-        }, positionDto: ${JSON.stringify(positionDto)}`,
+        `Failed to create position for UserId: ${user.id}, positionDto: ${positionDto}`,
       );
     }
   }
@@ -57,9 +55,15 @@ export class PositionsService {
     });
 
     const modifiedPositionDtos = await Promise.all(promises);
-    const positions = this.repo.create(modifiedPositionDtos);
-    await this.repo.insert(positions);
-    return positions;
+    try {
+      const positions = this.repo.create(modifiedPositionDtos);
+      await this.repo.insert(positions);
+      return positions;
+    } catch (error) {
+      throw new InternalServerErrorException(
+        `Failed to get positions for userID: ${user.id}`,
+      );
+    }
   }
 
   async getUserPositions(userId: number) {
@@ -100,7 +104,7 @@ export class PositionsService {
       return await this.repo.save(position);
     } catch (error) {
       throw new InternalServerErrorException(
-        `Failed to update position, ID: ${position.id}`,
+        `Failed to update position companyProfile, PositionId: ${position.id}`,
       );
     }
   }

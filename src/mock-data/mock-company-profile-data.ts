@@ -9,6 +9,7 @@ export const mockCompanyProfileDataOne: CompanyProfile = {
   industry: '',
   sector: '',
   country: '',
+  isCustomProfile: false,
 };
 export const mockCompanyProfileDataTwo: CompanyProfile = {
   id: 1,
@@ -19,6 +20,7 @@ export const mockCompanyProfileDataTwo: CompanyProfile = {
   industry: '',
   sector: '',
   country: '',
+  isCustomProfile: false,
 };
 
 // If you need it in JSON format
