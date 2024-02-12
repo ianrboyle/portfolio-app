@@ -20,8 +20,7 @@ export class UsersService {
 
     const user = await this.repo.findOneBy({ id });
 
-    if (!user) throw new NotFoundException('User Not Found');
-    return user;
+    return !user ? null : user;
   }
 
   find(email: string) {

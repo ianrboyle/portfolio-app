@@ -10,6 +10,7 @@ import {
   Session,
   UseGuards,
   UseFilters,
+  NotFoundException,
 } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user-dto';
 import { UsersService } from './users.service';
@@ -55,7 +56,9 @@ export class UsersController {
 
   @Get('/:id')
   async findUserById(@Param('id') id: string) {
-    return await this.usersService.findOne(parseInt(id));
+    const user = await this.usersService.findOne(parseInt(id));
+    if (!user) throw new NotFoundException('User Not Found');
+    return user;
   }
   @Get()
   findUserByEmail(@Query('email') email: string) {
