@@ -21,4 +21,7 @@ export class PositionDto {
 
   @Expose()
   companyProfileId: number;
+
+  @Expose()
+  industryId: number;
 }

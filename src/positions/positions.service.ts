@@ -36,14 +36,14 @@ export class PositionsService {
     }
     positionDto.companyProfileId = companyProfile.id;
 
-    let sector = !companyProfile.sector
+    let sector = companyProfile.sector
       ? await this.sectorsService.find(companyProfile.sector)
       : null;
 
     if (!sector) {
       sector = await this.sectorsService.create(companyProfile.sector);
     }
-    let industry = !companyProfile.industry
+    let industry = companyProfile.industry
       ? await this.industriesService.find(companyProfile.industry)
       : null;
 
