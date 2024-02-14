@@ -10,6 +10,10 @@ import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
 import { LoggerService } from '../logger/logger.service';
 import { CustomLog } from '../logger/custom-log.entity';
+import { SectorsService } from '../sectors/sectors.service';
+import { IndustriesService } from '../industries/industries.service';
+import { Sector } from '../sectors/sector.entity';
+import { Industry } from '../industries/industries.entity';
 
 jest.mock('@nestjs/axios');
 describe('PositionsController', () => {
@@ -32,6 +36,8 @@ describe('PositionsController', () => {
         ConfigService,
         LoggerService,
         HttpService,
+        SectorsService,
+        IndustriesService,
         {
           provide: getRepositoryToken(CompanyProfile),
           useValue: {
@@ -42,6 +48,22 @@ describe('PositionsController', () => {
         },
         {
           provide: getRepositoryToken(CustomLog),
+          useValue: {
+            create: jest.fn(),
+            save: jest.fn(),
+            find: jest.fn(),
+          },
+        },
+        {
+          provide: getRepositoryToken(Sector),
+          useValue: {
+            create: jest.fn(),
+            save: jest.fn(),
+            find: jest.fn(),
+          },
+        },
+        {
+          provide: getRepositoryToken(Industry),
           useValue: {
             create: jest.fn(),
             save: jest.fn(),

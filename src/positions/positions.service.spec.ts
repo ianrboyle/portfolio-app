@@ -24,12 +24,18 @@ import {
 } from '@nestjs/common';
 import { CreateCompanyProfileDto } from '../company-profiles/dtos/create-company-profile-dto';
 import { LoggerService } from '../logger/logger.service';
+import { SectorsService } from '../sectors/sectors.service';
+import { IndustriesService } from '../industries/industries.service';
+import { Industry } from '../industries/industries.entity';
+import { Sector } from '../sectors/sector.entity';
 
 describe('PositionsService', () => {
   let service: PositionsService;
   let mockRepository: Record<string, jest.Mock>;
   let fakeCompanyProfileServce: Partial<CompanyProfilesService>;
   let fakeLoggerService: Partial<LoggerService>;
+  let fakeSectorsService: Partial<SectorsService>;
+  let fakeIndustriesService: Partial<IndustriesService>;
   beforeEach(async () => {
     mockRepository = {
       create: jest.fn(),
@@ -83,6 +89,34 @@ describe('PositionsService', () => {
         return Promise.resolve(companyProfile);
       },
     };
+
+    fakeSectorsService = {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      create: (sectorName: string) => {
+        return Promise.resolve({
+          id: 1,
+          sectorName: 'Tech',
+          industries: [],
+        });
+      },
+      find: () => {
+        return Promise.resolve(null);
+      },
+    };
+    fakeIndustriesService = {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      create: (industryName: string) => {
+        const industry: Industry = {
+          id: 1,
+          industryName: 'Computuers',
+          sector: new Sector(),
+        };
+        return Promise.resolve(industry);
+      },
+      find: () => {
+        return Promise.resolve(null);
+      },
+    };
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         PositionsService,
@@ -97,6 +131,14 @@ describe('PositionsService', () => {
         {
           provide: LoggerService,
           useValue: fakeLoggerService,
+        },
+        {
+          provide: SectorsService,
+          useValue: fakeSectorsService,
+        },
+        {
+          provide: IndustriesService,
+          useValue: fakeIndustriesService,
         },
       ],
     }).compile();
@@ -179,7 +221,7 @@ describe('PositionsService', () => {
         },
       },
       companyProfileId: 1,
-      sectorId: 0,
+      industryId: 0,
     };
     mockRepository.find.mockReturnValue([mockPosition]);
 
@@ -206,7 +248,7 @@ describe('PositionsService', () => {
       costPerShare: initialCostPerShare,
       user: mockUserOne,
       companyProfileId: mockCompanyProfileDataOne.id,
-      sectorId: 0,
+      industryId: 0,
     };
 
     const updatePositionDto: UpdatePositionDto = {
@@ -236,7 +278,7 @@ describe('PositionsService', () => {
 
     expect(mockRepository.save).toHaveBeenCalledWith(mockPosition);
     expect(mockRepository.find).toHaveBeenCalledWith({
-      relations: ['user', 'companyProfile'],
+      relations: ['user'],
       where: {
         id: 1,
       },
@@ -252,7 +294,7 @@ describe('PositionsService', () => {
       costPerShare: initialCostPerShare,
       user: mockUserOne,
       companyProfileId: mockCompanyProfileDataOne.id,
-      sectorId: 0,
+      industryId: 0,
     };
 
     const updatePositionDto: UpdatePositionDto = {
@@ -275,7 +317,7 @@ describe('PositionsService', () => {
     expect(result).toEqual(updatedPosition);
     expect(mockRepository.save).toHaveBeenCalledWith(mockPosition);
     expect(mockRepository.find).toHaveBeenCalledWith({
-      relations: ['user', 'companyProfile'],
+      relations: ['user'],
       where: {
         id: 1,
       },
@@ -362,7 +404,7 @@ describe('PositionsService', () => {
     mockRepository.find.mockReturnValue([mockPosition]);
     await service.remove(mockPosition.id);
     expect(mockRepository.find).toHaveBeenCalledWith({
-      relations: ['user', 'companyProfile'],
+      relations: ['user'],
       where: {
         id: mockPosition.id,
       },
@@ -373,13 +415,14 @@ describe('PositionsService', () => {
   it('remove should a return a not found exception for no position ', async () => {
     const initialQuantity = 10;
     const initialCostPerShare = 100;
-    const mockPosition = {
+    const mockPosition: Position = {
       id: 1,
       symbol: 'AAPL',
       quantity: initialQuantity,
       costPerShare: initialCostPerShare,
       user: mockUserOne,
-      companyProfile: mockCompanyProfileDataOne,
+      companyProfileId: mockCompanyProfileDataOne.id,
+      industryId: 0,
     };
     mockRepository.find.mockReturnValue([]);
 
@@ -424,7 +467,7 @@ describe('PositionsService', () => {
       quantity: 10,
       costPerShare: 50,
       companyProfileId: 0,
-      sectorId: 0,
+      industryId: 0,
     };
 
     const positionDtos: CreatePositionDto[] = [positionDto];
