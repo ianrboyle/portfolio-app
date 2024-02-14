@@ -1,11 +1,11 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Position } from '../positions/position.entity';
+import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class CompanyProfile {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Index()
   @Column()
   symbol: string;
 
@@ -26,7 +26,4 @@ export class CompanyProfile {
 
   @Column({ type: 'boolean', default: false })
   isCustomProfile: boolean;
-
-  @OneToMany(() => Position, (position) => position.companyProfile)
-  positions: Position[];
 }

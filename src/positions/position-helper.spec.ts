@@ -3,6 +3,7 @@ import { mockCompanyProfileDataOne } from '../mock-data/mock-company-profile-dat
 import { mockUserOne } from '../mock-data/mock-user-data';
 import { UpdatePositionDto } from './dtos/update-position-dto';
 import { updatePosition } from './position-helpers';
+import { Position } from './position.entity';
 
 let updateDto: UpdatePositionDto = {
   updatedQuantity: 10,
@@ -17,13 +18,14 @@ describe('updatePosition', () => {
   });
 
   it('should update quantity and cost per share when quantity is positive', () => {
-    const initialPosition = {
+    const initialPosition: Position = {
       id: 1,
       symbol: 'AAPL',
       quantity: 10,
       costPerShare: 100,
       user: mockUserOne,
-      companyProfile: mockCompanyProfileDataOne,
+      companyProfileId: mockCompanyProfileDataOne.id,
+      sectorId: 0,
     };
     const expectedQuantity =
       initialPosition.quantity + updateDto.updatedQuantity;
@@ -40,13 +42,14 @@ describe('updatePosition', () => {
   });
 
   it('should set quantity to zero when updated quantity is negative and equal to current quantity', () => {
-    const initialPosition = {
+    const initialPosition: Position = {
       id: 1,
       symbol: 'AAPL',
       quantity: 10,
       costPerShare: 100,
       user: mockUserOne,
-      companyProfile: mockCompanyProfileDataOne,
+      companyProfileId: mockCompanyProfileDataOne.id,
+      sectorId: 0,
     };
     const updateDtoNegative = {
       updatedQuantity: -10,
@@ -60,13 +63,14 @@ describe('updatePosition', () => {
   });
 
   it('should decrease quantity when updated quantity is negative and not equal to current quantity', () => {
-    const initialPosition = {
+    const initialPosition: Position = {
       id: 1,
       symbol: 'AAPL',
       quantity: 10,
       costPerShare: 100,
       user: mockUserOne,
-      companyProfile: mockCompanyProfileDataOne,
+      companyProfileId: mockCompanyProfileDataOne.id,
+      sectorId: 0,
     };
     const updateDtoNegative = {
       updatedQuantity: -5,
@@ -81,13 +85,14 @@ describe('updatePosition', () => {
   });
 
   it('should handle zero division when totalShares is 0', () => {
-    const initialPosition = {
+    const initialPosition: Position = {
       id: 1,
       symbol: 'AAPL',
       quantity: 0,
       costPerShare: 0,
       user: mockUserOne,
-      companyProfile: mockCompanyProfileDataOne,
+      companyProfileId: mockCompanyProfileDataOne.id,
+      sectorId: 0,
     };
 
     const updatedPosition = updatePosition(initialPosition, updateDto);

@@ -19,8 +19,6 @@ export class PositionDto {
   @Expose()
   userId: number;
 
-  @IsOptional()
-  @Transform(({ obj }) => obj.companyProfile.id)
   @Expose()
   companyProfileId: number;
 }

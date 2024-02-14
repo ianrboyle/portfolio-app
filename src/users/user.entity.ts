@@ -8,8 +8,6 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
 } from 'typeorm';
-import { Sector } from '../sectors/sector.entity';
-import { Industry } from '../industries/industries.entity';
 
 @Entity()
 export class User {
@@ -24,12 +22,6 @@ export class User {
 
   @OneToMany(() => Position, (position) => position.user)
   positions: Position[];
-
-  @OneToMany(() => Sector, (sector) => sector.user)
-  sectors: Sector[];
-
-  @OneToMany(() => Industry, (industry) => industry.user)
-  industries: Industry[];
 
   @AfterInsert()
   logInsert() {

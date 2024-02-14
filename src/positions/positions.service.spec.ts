@@ -49,7 +49,6 @@ describe('PositionsService', () => {
           symbol: positionDto.symbol,
           price: 100,
           id: Math.floor(Math.random() * 99999),
-          positions: [],
           companyName: '',
           industry: '',
           sector: '',
@@ -74,7 +73,6 @@ describe('PositionsService', () => {
           symbol: createCompanyProfileDto.symbol,
           price: createCompanyProfileDto.price,
           id: Math.floor(Math.random() * 99999),
-          positions: [],
           companyName: createCompanyProfileDto.companyName,
           industry: createCompanyProfileDto.industry,
           sector: createCompanyProfileDto.sector,
@@ -114,7 +112,7 @@ describe('PositionsService', () => {
     mockRepository.create.mockReturnValue(createdPosition);
     createdPosition.user = mockUserOne;
 
-    createdPosition.companyProfile = mockCompanyProfileDataOne;
+    createdPosition.companyProfileId = mockCompanyProfileDataOne.id;
 
     mockRepository.save.mockReturnValue(createdPosition);
 
@@ -125,16 +123,14 @@ describe('PositionsService', () => {
 
     expect(position.user).toEqual(mockUserOne);
     expect(position.symbol).toEqual(mockPosition1.symbol);
-    expect(position.companyProfile.symbol).toEqual(
-      mockCompanyProfileDataOne.symbol,
-    );
+    expect(position.companyProfileId).toEqual(mockCompanyProfileDataOne.id);
   });
   it('should create a new position where findBySymbol returns null', async () => {
     const createdPosition = mockPosition2;
     mockRepository.create.mockReturnValue(createdPosition);
     createdPosition.user = mockUserTwo;
 
-    createdPosition.companyProfile = mockCompanyProfileDataTwo;
+    createdPosition.companyProfileId = mockCompanyProfileDataTwo.id;
 
     mockRepository.save.mockReturnValue(createdPosition);
 
@@ -145,9 +141,7 @@ describe('PositionsService', () => {
 
     expect(position.user).toEqual(mockUserTwo);
     expect(position.symbol).toEqual(mockPosition2.symbol);
-    expect(position.companyProfile.symbol).toEqual(
-      mockCompanyProfileDataTwo.symbol,
-    );
+    expect(position.companyProfileId).toEqual(mockCompanyProfileDataTwo.id);
   });
 
   it('should return a users positions', async () => {
@@ -184,8 +178,8 @@ describe('PositionsService', () => {
           throw new Error('Function not implemented.');
         },
       },
-
-      companyProfile: new CompanyProfile(),
+      companyProfileId: 1,
+      sectorId: 0,
     };
     mockRepository.find.mockReturnValue([mockPosition]);
 
@@ -205,13 +199,14 @@ describe('PositionsService', () => {
   it('should update a position with a positive update quantity', async () => {
     const initialQuantity = 10;
     const initialCostPerShare = 100;
-    const mockPosition = {
+    const mockPosition: Position = {
       id: 1,
       symbol: 'AAPL',
       quantity: initialQuantity,
       costPerShare: initialCostPerShare,
       user: mockUserOne,
-      companyProfile: mockCompanyProfileDataOne,
+      companyProfileId: mockCompanyProfileDataOne.id,
+      sectorId: 0,
     };
 
     const updatePositionDto: UpdatePositionDto = {
@@ -250,13 +245,14 @@ describe('PositionsService', () => {
   it('should update a position with a negative update quantity', async () => {
     const initialQuantity = 10;
     const initialCostPerShare = 100;
-    const mockPosition = {
+    const mockPosition: Position = {
       id: 1,
       symbol: 'AAPL',
       quantity: initialQuantity,
       costPerShare: initialCostPerShare,
       user: mockUserOne,
-      companyProfile: mockCompanyProfileDataOne,
+      companyProfileId: mockCompanyProfileDataOne.id,
+      sectorId: 0,
     };
 
     const updatePositionDto: UpdatePositionDto = {
@@ -405,18 +401,9 @@ describe('PositionsService', () => {
       country: 'country',
       isCustomProfile: true,
     };
-    const positionWithCustomProfile = {
+    const positionWithCustomProfile: Partial<Position> = {
       ...mockPositionWithNoCompanyProfile,
-      companyProfile: {
-        symbol: createCompanyProfileDto.symbol,
-        industry: createCompanyProfileDto.industry,
-        sector: createCompanyProfileDto.sector,
-        price: createCompanyProfileDto.price,
-        companyName: createCompanyProfileDto.companyName,
-        country: createCompanyProfileDto.country,
-        isCustomProfile: createCompanyProfileDto.isCustomProfile,
-        // Add other properties as needed
-      },
+      companyProfileId: 1,
     };
     mockRepository.save.mockReturnValue(positionWithCustomProfile);
 
@@ -425,10 +412,10 @@ describe('PositionsService', () => {
       createCompanyProfileDto,
     );
 
-    const companyProfile = updatedPosition.companyProfile;
+    const companyProfileId = updatedPosition.companyProfileId;
 
-    expect(updatedPosition.companyProfile).toBeDefined;
-    expect(companyProfile.symbol).toEqual(createCompanyProfileDto.symbol);
+    expect(updatedPosition.companyProfileId).toBeDefined;
+    expect(companyProfileId).toEqual(1);
   });
 
   it('should insert multiple positions', async () => {
@@ -436,6 +423,8 @@ describe('PositionsService', () => {
       symbol: 'AAPL',
       quantity: 10,
       costPerShare: 50,
+      companyProfileId: 0,
+      sectorId: 0,
     };
 
     const positionDtos: CreatePositionDto[] = [positionDto];
@@ -463,6 +452,9 @@ describe('PositionsService', () => {
     expect(mockRepository.create).toHaveBeenCalledWith(positionDtos);
     expect(mockRepository.insert).toHaveBeenCalledWith(positionDtos);
     expect(result).toEqual(positionDtos);
-    expect(result[0].companyProfile).toEqual(mockCompanyProfileDataOne);
+    const mockCompanyId = mockCompanyProfileDataOne.id;
+    // expect(result[0].companyProfileId).toEqual(mockCompanyProfileDataOne.id);
+    expect(mockCompanyProfileDataOne.id).toEqual(mockCompanyId);
+    expect(mockCompanyId).toEqual(result[0].companyProfileId);
   });
 });

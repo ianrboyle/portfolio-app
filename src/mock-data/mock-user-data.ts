@@ -6,8 +6,6 @@ export const mockUserOne: User = {
   email: 'email@test.com',
   password: 'password',
   positions: [mockPosition1],
-  sectors: [],
-  industries: [],
   logInsert: function (): void {
     throw new Error('Function not implemented.');
   },
@@ -23,8 +21,6 @@ export const mockUserTwo: User = {
   email: 'mockUserTwo@test.com',
   password: 'password',
   positions: [],
-  sectors: [],
-  industries: [],
   logInsert: function (): void {
     throw new Error('Function not implemented.');
   },

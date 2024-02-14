@@ -30,7 +30,7 @@ export class PositionsService {
     if (!companyProfile) {
       companyProfile = await this.companyProfilesService.create(positionDto);
     }
-    positionDto.companyProfile = companyProfile;
+    positionDto.companyProfileId = companyProfile.id;
     try {
       const position = this.repo.create(positionDto);
       return this.repo.save(position);
@@ -49,7 +49,7 @@ export class PositionsService {
       if (!companyProfile) {
         companyProfile = await this.companyProfilesService.create(p);
       }
-      p.companyProfile = companyProfile;
+      p.companyProfileId = companyProfile.id;
       p.user = user;
       return p;
     });
@@ -99,7 +99,7 @@ export class PositionsService {
       await this.companyProfilesService.createCustomCompanyProfile(
         createCompanyProfileDto,
       );
-    position.companyProfile = companyProfile;
+    position.companyProfileId = companyProfile.id;
     try {
       return await this.repo.save(position);
     } catch (error) {

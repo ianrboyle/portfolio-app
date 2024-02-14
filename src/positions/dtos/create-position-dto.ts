@@ -1,6 +1,5 @@
 import { IsNumber, IsOptional, IsString } from 'class-validator';
 import { User } from '../../users/user.entity';
-import { CompanyProfile } from '../../company-profiles/company-profile.entity';
 
 export class CreatePositionDto {
   @IsString()
@@ -16,5 +15,10 @@ export class CreatePositionDto {
   user?: User;
 
   @IsOptional()
-  companyProfile?: CompanyProfile;
+  @IsNumber()
+  companyProfileId: number;
+
+  @IsOptional()
+  @IsNumber()
+  sectorId: number;
 }

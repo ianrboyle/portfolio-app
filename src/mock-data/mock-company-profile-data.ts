@@ -4,7 +4,6 @@ export const mockCompanyProfileDataOne: CompanyProfile = {
   id: 1,
   symbol: 'AAPL',
   price: 150.5,
-  positions: [],
   companyName: '',
   industry: '',
   sector: '',
@@ -12,10 +11,9 @@ export const mockCompanyProfileDataOne: CompanyProfile = {
   isCustomProfile: false,
 };
 export const mockCompanyProfileDataTwo: CompanyProfile = {
-  id: 1,
+  id: 2,
   symbol: 'GOOGL',
   price: 150.5,
-  positions: [],
   companyName: '',
   industry: '',
   sector: '',
