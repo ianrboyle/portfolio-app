@@ -13,12 +13,16 @@ import { CompanyProfilesService } from '../company-profiles/company-profiles.ser
 import { updatePosition } from './position-helpers';
 import { UpdatePositionDto } from './dtos/update-position-dto';
 import { CreateCompanyProfileDto } from '../company-profiles/dtos/create-company-profile-dto';
+import { SectorsService } from '../sectors/sectors.service';
+import { IndustriesService } from '../industries/industries.service';
 
 @Injectable()
 export class PositionsService {
   constructor(
     @InjectRepository(Position) private repo: Repository<Position>,
     private companyProfilesService: CompanyProfilesService,
+    private sectorsService: SectorsService,
+    private industriesService: IndustriesService,
   ) {}
 
   async create(positionDto: CreatePositionDto, user: User) {
@@ -31,6 +35,27 @@ export class PositionsService {
       companyProfile = await this.companyProfilesService.create(positionDto);
     }
     positionDto.companyProfileId = companyProfile.id;
+
+    let sector = !companyProfile.sector
+      ? await this.sectorsService.find(companyProfile.sector)
+      : null;
+
+    if (!sector) {
+      sector = await this.sectorsService.create(companyProfile.sector);
+    }
+    let industry = !companyProfile.industry
+      ? await this.industriesService.find(companyProfile.industry)
+      : null;
+
+    if (!industry) {
+      industry = await this.industriesService.create(
+        companyProfile.industry,
+        sector,
+      );
+    }
+
+    positionDto.industryId = industry.id;
+
     try {
       const position = this.repo.create(positionDto);
       return this.repo.save(position);
@@ -69,7 +94,7 @@ export class PositionsService {
   async getUserPositions(userId: number) {
     return await this.repo.find({
       where: { user: { id: userId } },
-      relations: ['companyProfile', 'user'],
+      relations: ['user'],
     });
   }
 
@@ -82,7 +107,7 @@ export class PositionsService {
     if (!id) throw new BadRequestException('Invalid Position Id');
     const positions = await this.repo.find({
       where: { id },
-      relations: ['user', 'companyProfile'],
+      relations: ['user'],
     });
 
     if (!positions || positions.length <= 0)

@@ -19,7 +19,7 @@ export class Position {
   user: User;
 
   @Column({ nullable: true })
-  sectorId: number;
+  industryId: number;
 
   @Column()
   companyProfileId: number;

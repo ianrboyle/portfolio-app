@@ -6,6 +6,8 @@ import { Position } from './position.entity';
 import { HttpModule } from '@nestjs/axios';
 import { CompanyProfilesModule } from '../company-profiles/company-profiles.module';
 import { LoggerModule } from '../logger/logger.module';
+import { SectorsModule } from '../sectors/sectors.module';
+import { IndustriesModule } from '../industries/industries.module';
 
 @Module({
   imports: [
@@ -18,6 +20,8 @@ import { LoggerModule } from '../logger/logger.module';
     }),
     CompanyProfilesModule,
     LoggerModule,
+    SectorsModule,
+    IndustriesModule,
   ],
   controllers: [PositionsController],
   providers: [PositionsService],

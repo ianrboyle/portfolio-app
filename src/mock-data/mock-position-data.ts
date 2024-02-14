@@ -9,7 +9,7 @@ export const mockPosition1: Position = {
   quantity: 10,
   costPerShare: 100,
   user: mockUserOne,
-  sectorId: null,
+  industryId: null,
   companyProfileId: null,
 };
 
@@ -19,7 +19,7 @@ export const mockPosition2: Position = {
   quantity: 25,
   costPerShare: 200.5,
   user: mockUserTwo, // Assuming you have a mock user object
-  sectorId: null,
+  industryId: null,
   companyProfileId: null,
 };
 export const mockPositionWithNoCompanyProfile: Position = {
@@ -28,7 +28,7 @@ export const mockPositionWithNoCompanyProfile: Position = {
   quantity: 25,
   costPerShare: 200.5,
   user: mockUserTwo, // Assuming you have a mock user object
-  sectorId: null,
+  industryId: null,
   companyProfileId: null,
 };
 
@@ -37,14 +37,14 @@ export const mockCreatePositionDtoOne: CreatePositionDto = {
   costPerShare: 100,
   quantity: 10,
   companyProfileId: 0,
-  sectorId: 0,
+  industryId: 0,
 };
 export const mockCreatePositionDtoTwo: CreatePositionDto = {
   symbol: 'GOOGL',
   costPerShare: 200.5,
   quantity: 25,
   companyProfileId: 0,
-  sectorId: 0,
+  industryId: 0,
 };
 
 export const mockPositions: Position[] = [mockPosition1, mockPosition2];

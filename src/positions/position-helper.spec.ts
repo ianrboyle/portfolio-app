@@ -25,7 +25,7 @@ describe('updatePosition', () => {
       costPerShare: 100,
       user: mockUserOne,
       companyProfileId: mockCompanyProfileDataOne.id,
-      sectorId: 0,
+      industryId: 0,
     };
     const expectedQuantity =
       initialPosition.quantity + updateDto.updatedQuantity;
@@ -49,7 +49,7 @@ describe('updatePosition', () => {
       costPerShare: 100,
       user: mockUserOne,
       companyProfileId: mockCompanyProfileDataOne.id,
-      sectorId: 0,
+      industryId: 0,
     };
     const updateDtoNegative = {
       updatedQuantity: -10,
@@ -70,7 +70,7 @@ describe('updatePosition', () => {
       costPerShare: 100,
       user: mockUserOne,
       companyProfileId: mockCompanyProfileDataOne.id,
-      sectorId: 0,
+      industryId: 0,
     };
     const updateDtoNegative = {
       updatedQuantity: -5,
@@ -92,7 +92,7 @@ describe('updatePosition', () => {
       costPerShare: 0,
       user: mockUserOne,
       companyProfileId: mockCompanyProfileDataOne.id,
-      sectorId: 0,
+      industryId: 0,
     };
 
     const updatedPosition = updatePosition(initialPosition, updateDto);

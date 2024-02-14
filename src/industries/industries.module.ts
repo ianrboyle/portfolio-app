@@ -6,5 +6,6 @@ import { IndustriesService } from './industries.service';
 @Module({
   imports: [TypeOrmModule.forFeature([Industry])],
   providers: [IndustriesService],
+  exports: [IndustriesService],
 })
 export class IndustriesModule {}

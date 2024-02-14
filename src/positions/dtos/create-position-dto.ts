@@ -20,5 +20,5 @@ export class CreatePositionDto {
 
   @IsOptional()
   @IsNumber()
-  sectorId: number;
+  industryId: number;
 }
