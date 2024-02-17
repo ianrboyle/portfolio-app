@@ -30,12 +30,22 @@ export class CompanyProfilesService {
     if (!profile) {
       return this.getDefaultProfile();
     }
+
+    const sector =
+      profile.sector === '' || !profile.sector
+        ? 'Default Sector'
+        : profile.sector;
+    const industry =
+      profile.industry === '' || !profile.industry
+        ? 'Default Industry'
+        : profile.industry;
+
     const companyProfile: Partial<CompanyProfile> = {
       symbol: profile.symbol,
       companyName: profile.companyName,
       price: profile?.price || 0,
-      industry: profile?.industry,
-      sector: profile?.sector,
+      industry: industry,
+      sector: sector,
       country: profile?.country,
     };
     try {
@@ -88,6 +98,8 @@ export class CompanyProfilesService {
           symbol: 'default',
           companyName: 'custom profile required',
           price: 0,
+          sector: 'Default Sector',
+          industry: 'Default Industry',
         });
         return await this.repo.save(newDefaultProfile);
       }

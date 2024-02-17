@@ -8,6 +8,7 @@ import { FinancialModelingPrepService } from '../financialModelingPrep/financial
 import { mockStockData } from '../mock-data/mock-profile-data';
 import { Profile } from '../financialModelingPrep/models/profile';
 import { CreateCompanyProfileDto } from './dtos/create-company-profile-dto';
+import { CreatePositionDto } from '../positions/dtos/create-position-dto';
 
 describe('CompanyProfilesService', () => {
   let service: CompanyProfilesService;
@@ -142,5 +143,161 @@ describe('CompanyProfilesService', () => {
     );
 
     expect(profile.symbol).toEqual('custom');
+  });
+
+  it('should create a company profile with default sector and industry when profile sector and industry are empty', async () => {
+    // Mocking the financialPrepModelingService
+    fakeFMPService.getCompanyProfile = () => {
+      // Creating a profile with a non-null, non-empty sector
+      const profile: Profile = {
+        symbol: 'FAKE',
+        price: 10,
+        beta: 0,
+        volAvg: 0,
+        mktCap: 0,
+        lastDiv: 0,
+        range: '',
+        changes: 0,
+        companyName: '',
+        currency: '',
+        cik: '',
+        isin: '',
+        cusip: '',
+        exchange: '',
+        exchangeShortName: '',
+        industry: '',
+        website: '',
+        description: '',
+        ceo: '',
+        sector: '',
+        country: 'USA',
+        fullTimeEmployees: '',
+        phone: '',
+        address: '',
+        city: '',
+        state: '',
+        zip: '',
+        dcfDiff: 0,
+        dcf: 0,
+        image: '',
+        ipoDate: '',
+        defaultImage: false,
+        isEtf: false,
+        isActivelyTrading: false,
+        isAdr: false,
+        isFund: false,
+      };
+
+      return Promise.resolve(profile);
+    };
+
+    // Creating a company profile DTO with symbol 'FAKE'
+    const createCompanyProfileDto: CreatePositionDto = {
+      symbol: 'FAKE',
+      quantity: 0,
+      costPerShare: 0,
+      companyProfileId: 0,
+      industryId: 0,
+    };
+
+    // Mocking the repository
+    mockRepository.create.mockImplementation((data) => data);
+    mockRepository.save.mockImplementation((data) => data);
+
+    // Creating the service and calling the create method
+    const profile = await service.create(createCompanyProfileDto);
+
+    expect(profile).toBeDefined();
+    expect(profile.sector).toBe('Default Sector');
+    expect(profile.industry).toBe('Default Industry');
+  });
+
+  it('should create a company profile with default sector and industry when profile sector and industry are null ', async () => {
+    // Mocking the financialPrepModelingService
+    fakeFMPService.getCompanyProfile = () => {
+      // Creating a profile with a non-null, non-empty sector
+      const profile: Profile = {
+        symbol: 'FAKE',
+        price: 10,
+        beta: 0,
+        volAvg: 0,
+        mktCap: 0,
+        lastDiv: 0,
+        range: '',
+        changes: 0,
+        companyName: '',
+        currency: '',
+        cik: '',
+        isin: '',
+        cusip: '',
+        exchange: '',
+        exchangeShortName: '',
+        industry: null,
+        website: '',
+        description: '',
+        ceo: '',
+        sector: null,
+        country: 'USA',
+        fullTimeEmployees: '',
+        phone: '',
+        address: '',
+        city: '',
+        state: '',
+        zip: '',
+        dcfDiff: 0,
+        dcf: 0,
+        image: '',
+        ipoDate: '',
+        defaultImage: false,
+        isEtf: false,
+        isActivelyTrading: false,
+        isAdr: false,
+        isFund: false,
+      };
+
+      return Promise.resolve(profile);
+    };
+
+    // Creating a company profile DTO with symbol 'FAKE'
+    const createCompanyProfileDto: CreatePositionDto = {
+      symbol: 'FAKE',
+      quantity: 0,
+      costPerShare: 0,
+      companyProfileId: 0,
+      industryId: 0,
+    };
+
+    // Mocking the repository
+    mockRepository.create.mockImplementation((data) => data);
+    mockRepository.save.mockImplementation((data) => data);
+
+    // Creating the service and calling the create method
+    const profile = await service.create(createCompanyProfileDto);
+
+    expect(profile).toBeDefined();
+    expect(profile.sector).toBe('Default Sector');
+    expect(profile.industry).toBe('Default Industry');
+  });
+
+  it('should return a default company profile', async () => {
+    mockRepository.find.mockReturnValue(null);
+    const expectedDefaultProfile: CompanyProfile = {
+      symbol: 'default',
+      companyName: 'custom profile required',
+      price: 0,
+      sector: 'Default Sector',
+      industry: 'Default Industry',
+      id: 1,
+      country: '',
+      isCustomProfile: false,
+    };
+
+    mockRepository.create.mockReturnValue(expectedDefaultProfile);
+    mockRepository.save.mockReturnValue(expectedDefaultProfile);
+    const defaultProfile = await service.getDefaultProfile();
+
+    expect(defaultProfile).toBeDefined();
+    expect(defaultProfile.sector).toEqual('Default Sector');
+    expect(defaultProfile).toBeDefined();
   });
 });
