@@ -50,14 +50,14 @@ describe('PositionsService', () => {
     const mockCompanyProfiles: CompanyProfile[] = [mockCompanyProfileDataOne];
 
     fakeCompanyProfileServce = {
-      create: (positionDto: CreatePositionDto) => {
+      create: (symbol: string) => {
         const companyProfile: CompanyProfile = {
-          symbol: positionDto.symbol,
+          symbol: symbol,
           price: 100,
           id: Math.floor(Math.random() * 99999),
           companyName: '',
-          industry: '',
-          sector: '',
+          industry: 'Computers and Manufacturing',
+          sector: 'Tech',
           country: '',
           isCustomProfile: false,
         };
@@ -108,7 +108,7 @@ describe('PositionsService', () => {
       create: (industryName: string) => {
         const industry: Industry = {
           id: 1,
-          industryName: 'Computuers',
+          industryName: 'Computers and Manufacturing',
           sector: new Sector(),
         };
         return Promise.resolve(industry);
@@ -499,5 +499,171 @@ describe('PositionsService', () => {
     // expect(result[0].companyProfileId).toEqual(mockCompanyProfileDataOne.id);
     expect(mockCompanyProfileDataOne.id).toEqual(mockCompanyId);
     expect(mockCompanyId).toEqual(result[0].companyProfileId);
+  });
+  it('should find a sector and industry and create a position with an industry id of 1', async () => {
+    const positionDto: CreatePositionDto = {
+      symbol: 'FAKE',
+      quantity: 10,
+      costPerShare: 50,
+      companyProfileId: 0,
+      industryId: 0,
+    };
+
+    jest.spyOn(fakeCompanyProfileServce, 'findBySymbol').mockResolvedValue({
+      id: 1,
+      symbol: 'FAKE',
+      companyName: 'FAKE',
+      price: 0,
+      industry: 'test sector',
+      sector: 'test industry',
+      country: 'fake country',
+      isCustomProfile: false,
+    });
+
+    jest.spyOn(fakeSectorsService, 'find').mockResolvedValue({
+      id: 1,
+      sectorName: 'test sector',
+      industries: [],
+    });
+    jest.spyOn(fakeIndustriesService, 'find').mockResolvedValue({
+      id: 1,
+      industryName: 'test industry',
+      sector: {
+        id: 1,
+        sectorName: 'test sector',
+        industries: [],
+      },
+    });
+
+    mockRepository.create.mockImplementation((data) => data);
+    mockRepository.save.mockImplementation((data) => data);
+
+    const result = await service.create(positionDto, mockUserOne);
+
+    // Assertions
+    expect(fakeCompanyProfileServce.findBySymbol).toHaveBeenCalledTimes(1);
+    expect(fakeSectorsService.find).toHaveBeenCalledTimes(1);
+    expect(mockRepository.create).toHaveBeenCalledWith(positionDto);
+    expect(result.industryId).toEqual(1);
+  });
+
+  it('should create an industry when industryService.find returns null', async () => {
+    fakeIndustriesService.create = () => {
+      const mockIndustry: Industry = {
+        id: 1,
+        industryName: 'test industry',
+        sector: new Sector(),
+      };
+
+      return Promise.resolve(mockIndustry);
+    };
+
+    const industry = await service.getOrCreateIndustry(
+      'test industry',
+      new Sector(),
+    );
+
+    expect(industry.industryName).toEqual('test industry');
+  });
+
+  it('should return an already existing industry', async () => {
+    fakeIndustriesService.find = () => {
+      const mockIndustry: Industry = {
+        id: 1,
+        industryName: 'test industry',
+        sector: new Sector(),
+      };
+
+      return Promise.resolve(mockIndustry);
+    };
+
+    jest.spyOn(fakeIndustriesService, 'create');
+
+    const industry = await service.getOrCreateIndustry(
+      'test industry',
+      new Sector(),
+    );
+    expect(fakeIndustriesService.create).toHaveBeenCalledTimes(0);
+    expect(industry.industryName).toEqual('test industry');
+  });
+  it('should create a sector when sectorService.find returns null', async () => {
+    fakeSectorsService.create = () => {
+      const mockSector: Sector = {
+        id: 1,
+        sectorName: 'test sector',
+        industries: [],
+      };
+
+      return Promise.resolve(mockSector);
+    };
+
+    const sector = await service.getOrCreateSector('test sector');
+
+    expect(sector.sectorName).toEqual('test sector');
+  });
+
+  it('should return an already existing sector', async () => {
+    fakeSectorsService.find = () => {
+      const mockSector: Sector = {
+        id: 1,
+        sectorName: 'test sector',
+        industries: [],
+      };
+
+      return Promise.resolve(mockSector);
+    };
+
+    jest.spyOn(fakeSectorsService, 'create');
+
+    const sector = await service.getOrCreateSector('test sector');
+    expect(fakeSectorsService.create).toHaveBeenCalledTimes(0);
+    expect(sector.sectorName).toEqual('test sector');
+  });
+
+  it('should create a companyProfile when companyProfiule.find returns null', async () => {
+    fakeCompanyProfileServce.findBySymbol = () => {
+      return Promise.resolve(null);
+    };
+    fakeCompanyProfileServce.create = () => {
+      const mockCompanyProfile: CompanyProfile = {
+        id: 1,
+        symbol: 'FAKE',
+        companyName: 'test',
+        price: 0,
+        industry: '',
+        sector: '',
+        country: '',
+        isCustomProfile: false,
+      };
+
+      return Promise.resolve(mockCompanyProfile);
+    };
+
+    const companyProfile = await service.getOrCreateCompanyProfile('FAKE');
+
+    expect(companyProfile.symbol).toEqual('FAKE');
+  });
+
+  it('should return an already existing companyProfile', async () => {
+    fakeCompanyProfileServce.findBySymbol = () => {
+      const mockCompanyProfile: CompanyProfile = {
+        id: 1,
+        symbol: 'FAKE',
+        companyName: 'test',
+        price: 0,
+        industry: '',
+        sector: '',
+        country: '',
+        isCustomProfile: false,
+      };
+
+      return Promise.resolve(mockCompanyProfile);
+    };
+
+    jest.spyOn(fakeCompanyProfileServce, 'create');
+
+    const companyProfile = await service.getOrCreateCompanyProfile('FAKE');
+    expect(fakeCompanyProfileServce.create).toHaveBeenCalledTimes(0);
+    expect(companyProfile.symbol).toEqual('FAKE');
   });
 });

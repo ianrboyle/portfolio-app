@@ -2,7 +2,6 @@ import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CompanyProfile } from './company-profile.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreatePositionDto } from '../positions/dtos/create-position-dto';
 import { FinancialModelingPrepService } from '../financialModelingPrep/financial-modeling-prep.service';
 import { CreateCompanyProfileDto } from './dtos/create-company-profile-dto';
 
@@ -14,12 +13,11 @@ export class CompanyProfilesService {
     private financialPrepModelingService: FinancialModelingPrepService,
   ) {}
 
-  async create(positionDto: CreatePositionDto) {
+  async create(symbol: string) {
     //assume the company profile doesn't exist - yes, because we will check if it exists prior to creating
     // find one with fmps
-    const profile = await this.financialPrepModelingService.getCompanyProfile(
-      positionDto.symbol,
-    );
+    const profile =
+      await this.financialPrepModelingService.getCompanyProfile(symbol);
     // if fmps doesn't have one, we need to provide a custom one where user or maybe admin will create later
     // or user creates, and we add custom flag to companyProfile, and user can choose if they want ones that have been created or opt for a new one
     //so for now we'll provide a default
@@ -53,7 +51,7 @@ export class CompanyProfilesService {
       return await this.repo.save(companyProfile);
     } catch (error) {
       throw new InternalServerErrorException(
-        `Failed to create company profile for position: ${positionDto}`,
+        `Failed to create company profile for position: ${symbol}`,
       );
     }
   }

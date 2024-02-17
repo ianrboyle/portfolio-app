@@ -9,8 +9,8 @@ export const mockPosition1: Position = {
   quantity: 10,
   costPerShare: 100,
   user: mockUserOne,
-  industryId: null,
-  companyProfileId: null,
+  industryId: 1,
+  companyProfileId: 1,
 };
 
 export const mockPosition2: Position = {

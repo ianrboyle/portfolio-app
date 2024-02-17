@@ -55,7 +55,7 @@ describe('CompanyProfilesService', () => {
     mockRepository.create.mockReturnValue(mockCompanyProfileDataOne);
     mockRepository.save.mockReturnValue(mockCompanyProfileDataOne);
 
-    const profile = await service.create(mockCreatePositionDtoOne);
+    const profile = await service.create(mockCreatePositionDtoOne.symbol);
 
     expect(profile.symbol).toEqual(mockCreatePositionDtoOne.symbol);
   });
@@ -90,7 +90,7 @@ describe('CompanyProfilesService', () => {
       price: 0,
     });
 
-    const profile = await service.create(mockCreatePositionDtoOne);
+    const profile = await service.create(mockCreatePositionDtoOne.symbol);
 
     expect(profile.companyName).toEqual('custom profile required');
   });
@@ -106,7 +106,7 @@ describe('CompanyProfilesService', () => {
       },
     ]);
 
-    const profile = await service.create(mockCreatePositionDtoOne);
+    const profile = await service.create(mockCreatePositionDtoOne.symbol);
 
     expect(profile.companyName).toEqual('custom profile required');
   });
@@ -205,7 +205,7 @@ describe('CompanyProfilesService', () => {
     mockRepository.save.mockImplementation((data) => data);
 
     // Creating the service and calling the create method
-    const profile = await service.create(createCompanyProfileDto);
+    const profile = await service.create(createCompanyProfileDto.symbol);
 
     expect(profile).toBeDefined();
     expect(profile.sector).toBe('Default Sector');
@@ -272,7 +272,7 @@ describe('CompanyProfilesService', () => {
     mockRepository.save.mockImplementation((data) => data);
 
     // Creating the service and calling the create method
-    const profile = await service.create(createCompanyProfileDto);
+    const profile = await service.create(createCompanyProfileDto.symbol);
 
     expect(profile).toBeDefined();
     expect(profile.sector).toBe('Default Sector');

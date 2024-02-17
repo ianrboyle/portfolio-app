@@ -15,6 +15,7 @@ import { UpdatePositionDto } from './dtos/update-position-dto';
 import { CreateCompanyProfileDto } from '../company-profiles/dtos/create-company-profile-dto';
 import { SectorsService } from '../sectors/sectors.service';
 import { IndustriesService } from '../industries/industries.service';
+import { Sector } from '../sectors/sector.entity';
 
 @Injectable()
 export class PositionsService {
@@ -28,31 +29,26 @@ export class PositionsService {
   async create(positionDto: CreatePositionDto, user: User) {
     positionDto.user = user;
 
-    let companyProfile = await this.companyProfilesService.findBySymbol(
+    const companyProfile = await this.getOrCreateCompanyProfile(
       positionDto.symbol,
     );
-    if (!companyProfile) {
-      companyProfile = await this.companyProfilesService.create(positionDto);
-    }
     positionDto.companyProfileId = companyProfile.id;
+    const sector = await this.getOrCreateSector(companyProfile.sector);
+    const industry = await this.getOrCreateIndustry(
+      companyProfile.industry,
+      sector,
+    );
 
-    let sector = companyProfile.sector
-      ? await this.sectorsService.find(companyProfile.sector)
-      : null;
+    // const result = await this.repo
+    //   .createQueryBuilder('position')
+    //   .innerJoin('industry', 'i', '"i"."id" = "position"."industryId"')
+    //   .addSelect('"i"."industryName"')
+    //   .innerJoin('sector', 's', '"s"."id" = "i"."sectorId"')
+    //   .addSelect('"s"."sectorName"')
+    //   .where('"position"."symbol" = :symbol', { symbol: 'EPD' })
+    //   .getRawMany();
 
-    if (!sector) {
-      sector = await this.sectorsService.create(companyProfile.sector);
-    }
-    let industry = companyProfile.industry
-      ? await this.industriesService.find(companyProfile.industry)
-      : null;
-
-    if (!industry) {
-      industry = await this.industriesService.create(
-        companyProfile.industry,
-        sector,
-      );
-    }
+    // console.log(result);
 
     positionDto.industryId = industry.id;
 
@@ -68,13 +64,14 @@ export class PositionsService {
 
   async insertMultiple(positionDtos: CreatePositionDto[], user: User) {
     const promises = positionDtos.map(async (p) => {
-      let companyProfile = await this.companyProfilesService.findBySymbol(
-        p.symbol,
+      const companyProfile = await this.getOrCreateCompanyProfile(p.symbol);
+      const sector = await this.getOrCreateSector(companyProfile.sector);
+      const industry = await this.getOrCreateIndustry(
+        companyProfile.industry,
+        sector,
       );
-      if (!companyProfile) {
-        companyProfile = await this.companyProfilesService.create(p);
-      }
       p.companyProfileId = companyProfile.id;
+      p.industryId = industry.id;
       p.user = user;
       return p;
     });
@@ -169,5 +166,35 @@ export class PositionsService {
   async remove(id: number) {
     const position = await this.findOne(id);
     return this.repo.remove(position);
+  }
+
+  async getOrCreateSector(sectorName: string) {
+    let sector = sectorName ? await this.sectorsService.find(sectorName) : null;
+
+    if (!sector) {
+      sector = await this.sectorsService.create(sectorName);
+    }
+
+    return sector;
+  }
+
+  async getOrCreateIndustry(industryName: string, sector: Sector) {
+    let industry = industryName
+      ? await this.industriesService.find(industryName)
+      : null;
+
+    if (!industry) {
+      industry = await this.industriesService.create(industryName, sector);
+    }
+
+    return industry;
+  }
+
+  async getOrCreateCompanyProfile(symbol: string) {
+    let companyProfile = await this.companyProfilesService.findBySymbol(symbol);
+    if (!companyProfile) {
+      companyProfile = await this.companyProfilesService.create(symbol);
+    }
+    return companyProfile;
   }
 }
