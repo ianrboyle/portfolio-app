@@ -18,7 +18,7 @@ export class SectorsService {
   }
 
   async findOne(id: number) {
-    if (!id) throw new BadRequestException('Invalid User Id');
+    if (!id) throw new BadRequestException(`Invalid Sector Id: ${id}`);
 
     const sector = await this.repo.findOneBy({ id });
 
