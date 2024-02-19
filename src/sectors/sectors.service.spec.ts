@@ -13,6 +13,13 @@ describe('SectorsService', () => {
       save: jest.fn(),
       find: jest.fn(),
       findOneBy: jest.fn(),
+      createQueryBuilder: jest.fn(() => ({
+        innerJoin: jest.fn().mockReturnThis(),
+        addSelect: jest.fn().mockReturnThis(),
+        where: jest.fn().mockReturnThis(),
+        getRawMany: jest.fn(),
+      })),
+      getRawMany: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -86,5 +93,72 @@ describe('SectorsService', () => {
     mockRepository.findOneBy.mockReturnValue(null);
     const exception = new NotFoundException(`Sector With ID: 1 Not Found`);
     await expect(service.findOne(1)).rejects.toThrow(exception);
+  });
+
+  it('should get an array of PositionSqlQueryResults', async () => {
+    mockRepository.createQueryBuilder.mockReturnValue({
+      select: jest.fn().mockReturnThis(),
+      innerJoin: jest.fn().mockReturnThis(),
+      where: jest.fn().mockReturnThis(),
+      addSelect: jest.fn().mockReturnThis(),
+      getRawMany: jest.fn().mockReturnValue([
+        {
+          sectorId: 1,
+          sectorName: 'Technology',
+          industryName: 'Software',
+          currentValue: 1000,
+          symbol: 'AAPL',
+          positionId: 1,
+          industryId: 1,
+          totalCostBasis: 100,
+          companyName: 'Apple Inc.',
+        },
+        {
+          sectorId: 2,
+          sectorName: 'Energy',
+          industryName: 'Oil',
+          currentValue: 100,
+          symbol: 'BP',
+          positionId: 2,
+          industryId: 2,
+          totalCostBasis: 100,
+          companyName: 'BP',
+        },
+        {
+          sectorId: 1,
+          sectorName: 'Technology',
+          industryName: 'Computers',
+          currentValue: 100,
+          symbol: 'MSFT',
+          positionId: 3,
+          industryId: 3,
+          totalCostBasis: 100,
+          companyName: 'Microsoft',
+        },
+        {
+          sectorId: 1,
+          sectorName: 'Technology',
+          industryName: 'Software',
+          currentValue: 1000,
+          symbol: 'SOFT',
+          positionId: 4,
+          industryId: 1,
+          totalCostBasis: 100,
+          companyName: 'Software Inc.',
+        },
+      ]),
+    });
+
+    const result = await service.getPositionQueryResult(1);
+
+    expect(result.length).toEqual(4);
+    expect(mockRepository.createQueryBuilder).toHaveBeenCalled();
+  });
+
+  it;
+
+  it('should test your method', async () => {
+    // Example of setting up a mock for createQueryBuilder
+    // ...
   });
 });
